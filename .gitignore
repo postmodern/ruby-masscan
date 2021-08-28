@@ -1,0 +1,11 @@
+/Gemfile.lock
+/coverage
+/doc
+/pkg
+/.yardoc
+.DS_Store
+*.db
+*.log
+*.swp
+*~
+*.gem

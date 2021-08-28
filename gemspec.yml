@@ -1,0 +1,22 @@
+name: ruby-masscan
+summary: A Ruby interface to masscan.
+description:
+  A Ruby interface to masscan, an Internet-scale port scanner.
+  Allows automating masscan and parsing masscan Binary, List, JSON, and output
+  file formats.
+
+license: MIT
+authors: Postmodern
+email: postmodern.mod3@gmail.com
+homepage: https://github.com/postmodern/ruby-masscan#readme
+has_yard: true
+
+required_ruby_version: ">= 2.0.0"
+
+requirements: masscan >= 1.0.0
+
+dependencies:
+  rprogram: ~> 0.3
+
+development_dependencies:
+  bundler: ~> 2.0
