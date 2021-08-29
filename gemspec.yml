@@ -11,7 +11,7 @@ email: postmodern.mod3@gmail.com
 homepage: https://github.com/postmodern/ruby-masscan#readme
 has_yard: true
 
-required_ruby_version: ">= 2.7.0"
+required_ruby_version: ">= 2.0.0"
 
 requirements: masscan >= 1.0.0
 
