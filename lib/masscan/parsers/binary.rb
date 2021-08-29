@@ -55,7 +55,7 @@ module Masscan
       #   If no block is given, it will return an Enumerator.
       #
       def self.parse(io)
-        return enum_for(__method__) unless block_given?
+        return enum_for(__method__,io) unless block_given?
 
         pseudo = read_pseudo_record(io)
 
