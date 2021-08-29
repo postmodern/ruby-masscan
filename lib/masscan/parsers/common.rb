@@ -6,6 +6,7 @@ module Masscan
     # @api private
     #
     module Common
+      # Mapping of status strings to their keywords.
       STATUSES = {
         'open'   => :open,
         'closed' => :closed
@@ -24,6 +25,7 @@ module Masscan
         STATUSES[status] || status
       end
 
+      # Mapping of IP protocol names to their keywords.
       IP_PROTOCOLS = {
         'tcp'  => :tcp,
         'udp'  => :udp,
@@ -45,6 +47,7 @@ module Masscan
         IP_PROTOCOLS[proto] || proto
       end
 
+      # Mapping of application protocol names to their keywords.
       APP_PROTOCOLS = {
         "ssh1" => :ssh1,
         "ssh2" => :ssh2,

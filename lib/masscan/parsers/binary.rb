@@ -36,6 +36,7 @@ module Masscan
       class CorruptedFile < RuntimeError
       end
 
+      # Maximum buffer length for a single record.
       BUF_MAX = 1024 * 1024
 
       #
@@ -131,10 +132,13 @@ module Masscan
         return total_records
       end
 
+      # The "psecudo record" length
       PSEUDO_RECORD_SIZE = 99 # 'a'.ord + 2
 
+      # Masscan binary format version compatability.
       MASSCAN_VERSION_FAMILY = "1.1"
 
+      # The `masscan` binary format magic string.
       MASSCAN_MAGIC = "masscan/#{MASSCAN_VERSION_FAMILY}"
 
       #
@@ -229,6 +233,7 @@ module Masscan
         IPAddr.new((ipv6_hi << 64) | ipv6_lo,Socket::AF_INET6)
       end
 
+      # Mapping of IP protocol numbers to keywords.
       IP_PROTOCOLS = {
         Socket::IPPROTO_ICMP   => :icmp,
         Socket::IPPROTO_ICMPV6 => :icmp,
@@ -254,6 +259,7 @@ module Masscan
         IP_PROTOCOLS[proto]
       end
 
+      # List of application protocol keywords.
       APP_PROTOCOLS = [
         nil,
         :heur,
