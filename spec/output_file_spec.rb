@@ -100,7 +100,7 @@ describe Masscan::OutputFile do
     end
   end
 
-  subject { described_class.new(Fixtures.join('masscan.txt')) }
+  subject { described_class.new(Fixtures.join('masscan.list')) }
 
   describe "#each" do
     context "when given a block" do
