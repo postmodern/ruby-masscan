@@ -119,14 +119,16 @@ describe Masscan::OutputFile do
     end
 
     context "when given no block" do
-      it "must return an Enumerator" do
-        yielded_records = []
-
-        subject.each do |record|
-          yielded_records << record
+      let(:expected_records) do
+        [].tap do |yielded_records|
+          subject.each do |record|
+            yielded_records << record
+          end
         end
+      end
 
-        expect(subject.each.to_a).to eq(yielded_records)
+      it "must return an Enumerator" do
+        expect(subject.each.to_a).to eq(expected_records)
       end
     end
   end
