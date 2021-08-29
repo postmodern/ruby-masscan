@@ -132,10 +132,10 @@ module Masscan
         return total_records
       end
 
-      # The "psecudo record" length
+      # The "pseudo record" length
       PSEUDO_RECORD_SIZE = 99 # 'a'.ord + 2
 
-      # Masscan binary format version compatability.
+      # Masscan binary format version compatibility.
       MASSCAN_VERSION_FAMILY = "1.1"
 
       # The `masscan` binary format magic string.
