@@ -26,6 +26,11 @@ module Masscan
     # @return [Symbol]
     attr_reader :format
 
+    # The parser for the output file format.
+    #
+    # @return [Parsers::Binary, Parsers::JSON, Parsers::List]
+    attr_reader :parser
+
     #
     # Initializes the output file.
     #
