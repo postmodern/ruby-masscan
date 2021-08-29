@@ -105,7 +105,9 @@ module Masscan
     long_option flag: '--http-user-agent', name: :http_user_agent
 
     long_option flag: '--http-field', multiple: true do |opt,value|
-      [opt.flag, "#{value[0]}:#{value[1]}"]
+      name, value = value.first
+
+      [opt.flag, "#{name}:#{value}"]
     end
 
     long_option flag: '--http-field-remove', name: :http_field_remove
@@ -120,11 +122,12 @@ module Masscan
     long_option flag: '--resume-index', name: :resume_index
     long_option flag: '--resume-count', name: :resume_count
     long_option flag: '--shards', name: :shards do |opt,value|
-      [opt.flag, case value
-                 when Rational then "#{value.numerator}/#{value.denominator}"
-                 when Array    then "#{value[0]}/#{value[1]}"
-                 else               value.to_s
-                 end]
+      case value.length
+      when 2 then [opt.flag, "#{value[0]}/#{value[1]}"]
+      when 1 then [opt.flag, "#{value[0]}"]
+      else
+        raise(ArgumentError,"#{self}#shards= does not accept more than two values")
+      end
     end
     long_option flag: '--rotate', name: :rotate
     long_option flag: '--rotate-offset', name: :rotate_offset
