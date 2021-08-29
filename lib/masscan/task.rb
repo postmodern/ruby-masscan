@@ -4,6 +4,68 @@ module Masscan
   #
   # ## `masscan` options:
   #
+  # * `--range` - `masscan.range`
+  # * `-p` - `masscan.ports`
+  # * `--banners` - `masscan.banners`
+  # * `--rate` - `masscan.rate`
+  # * `--conf` - `masscan.config_file`
+  # * `--resume` - `masscan.resume`
+  # * `--echo` - `masscan.echo`
+  # * `--adapter` - `masscan.adapter`
+  # * `--adapter-ip` - `masscan.adapter_ip`
+  # * `--adapter-port` - `masscan.adapter_port`
+  # * `--adapter-mac` - `masscan.adapter_mac`
+  # * `--adapter-vlan` - `masscan.adapter_vlan`
+  # * `--router-mac` - `masscan.router_mac`
+  # * `--ping` - `masscan.ping`
+  # * `--exclude` - `masscan.exclude`
+  # * `--excludefile` - `masscan.exclude_file`
+  # * `--includefile` - `masscan.include_file`
+  # * `--append-output` - `masscan.append_output`
+  # * `--iflist` - `masscan.list_interfaces`
+  # * `--retries` - `masscan.retries`
+  # * `--nmap` - `masscan.nmap_help`
+  # * `--pcap-payloads` - `masscan.pcap_payloads`
+  # * `--nmap-payloads` - `masscan.nmap_payloads`
+  # * `--http-method` - `masscan.http_method`
+  # * `--http-url` - `masscan.http_url`
+  # * `--http-version` - `masscan.http_version`
+  # * `--http-host` - `masscan.http_host`
+  # * `--http-user-agent` - `masscan.http_user_agent`
+  # * `--http-field` - `masscan.http_field`
+  # * `--http-field-remove` - `masscan.http_field_remove`
+  # * `--http-cookie` - `masscan.http_cookie`
+  # * `--http-payload` - `masscan.http_payload`
+  # * `--show` - `masscan.show`
+  # * `--noshow` - `masscan.hide`
+  # * `--pcap` - `masscan.pcap`
+  # * `--packet-trace` - `masscan.packet_trace`
+  # * `--pfring` - `masscan.pfring`
+  # * `--resume-index` - `masscan.resume_index`
+  # * `--resume-count` - `masscan.resume_count`
+  # * `--shards` - `masscan.shards`
+  # * `--rotate` - `masscan.rotate`
+  # * `--rotate-offset` - `masscan.rotate_offset`
+  # * `--rotate-size` - `masscan.rotate_size`
+  # * `--rotate-dir` - `masscan.rotate_dir`
+  # * `--seed` - `masscan.seed`
+  # * `--regress` - `masscan.regress`
+  # * `--ttl` - `masscan.ttl`
+  # * `--wait` - `masscan.wait`
+  # * `--offline` - `masscan.offline`
+  # * `-sL` - `masscan.print_list`
+  # * `--interactive` - `masscan.interactive`
+  # * `--output-format` - `masscan.output_format`
+  # * `--output-filename` - `masscan.output_file`
+  # * `-oB` - `masscan.output_binary`
+  # * `-oX` - `masscan.output_xml`
+  # * `-oG` - `masscan.output_grepable`
+  # * ` -oJ` - `masscan.output_json`
+  # * `-oL` - `masscan.output_list`
+  # * `--readscan` - `masscan.read_scan`
+  # * `-V` - `masscan.version`
+  # * `-h` - `masscan.help`
+  #
   # @see https://github.com/robertdavidgraham/masscan/blob/master/doc/masscan.8.markdown
   #
   class Task < RProgram::Task
