@@ -7,6 +7,8 @@ module Masscan
     #
     # Parses the `masscan -oL` output format.
     #
+    # @api semipublic
+    #
     module List
       extend Common
 
@@ -14,12 +16,17 @@ module Masscan
       # Opens a list file for parsing.
       #
       # @param [String] path
+      #   The path to the file.
       #
       # @yield [file]
+      #   If a block is given, it will be passed the opened file.
+      #   Once the block returns, the file will be closed.
       #
       # @yieldparam [File] file
+      #   The opened file.
       #
       # @return [File]
+      #   If no block was given, the opened file will be returned.
       #
       def self.open(path,&block)
         File.open(path,&block)
@@ -30,13 +37,17 @@ module Masscan
       #
       # Parses the masscan simple list data.
       #
-      # @param [IO] io
+      # @param [#each_line] io
+      #   The IO object to read from.
       #
       # @yield [record]
+      #   If a block is given, it will be passed each parsed record.
       #
       # @yieldparam [Status, Banner] record
+      #   A parsed record, either a {Status} or a {Banner} object.
       #
       # @return [Enumerator]
+      #   If no block is given, it will return an Enumerator.
       #
       def self.parse(io)
         return enum_for(__method__,io) unless block_given?

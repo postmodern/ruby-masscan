@@ -30,10 +30,13 @@ module Masscan
     # Initializes the output file.
     #
     # @param [String] path
+    #   The path to the output file.
     #
     # @param [:binary, :list, :json, :ndjson] format
+    #   The format of the output file. Defaults to {infer_format}.
     #
     # @raise [ArgumentError]
+    #   The output format was not given and it cannot be inferred.
     #
     def initialize(path, format: self.class.infer_format(path))
       @path   = path
@@ -48,10 +51,13 @@ module Masscan
     # Infers the format from the output file's extension name.
     #
     # @param [String] path
+    #   The path to the output file.
     #
     # @return [:binary, :list, :json, :ndjson]
+    #   The output format inferred from the file's extension name.
     #
     # @raise [ArgumentError]
+    #   The output format could not be inferred from the file's name.
     #
     def self.infer_format(path)
       case File.extname(path)
@@ -69,10 +75,13 @@ module Masscan
     # Parses the contents of the output file.
     #
     # @yield [record]
+    #   If a block is given, it will be passed each parsed record.
     #
     # @yield [Status, Banner] record
+    #   A parsed record, either a {Status} or a {Banner}.
     #
     # @return [Enumerator]
+    #   If no block is given, an Enumerator will be returned.
     #
     def each(&block)
       return enum_for(__method__) unless block

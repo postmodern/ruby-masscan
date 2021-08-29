@@ -10,17 +10,24 @@ module Masscan
     #
     # @note Ported from https://github.com/robertdavidgraham/masscan/blob/1.3.2/src/in-binary.c
     #
+    # @api semipublic
+    #
     module Binary
       #
       # Opens a binary file for parsing.
       #
       # @param [String] path
+      #   The path to the file.
       #
       # @yield [file]
+      #   If a block is given, it will be passed the opened file.
+      #   Once the block returns, the file will be closed.
       #
       # @yieldparam [File]
+      #   The opened file.
       #
       # @return [File]
+      #   If no block was given, the opened file will be returned.
       #
       def self.open(path,&block)
         File.open(path,'rb',&block)
@@ -35,12 +42,16 @@ module Masscan
       # Parses masscan binary data.
       #
       # @param [IO] io
+      #   The IO object to read from.
       #
       # @yield [record]
+      #   If a block is given, it will be passed each parsed record.
       #
       # @yieldparam [Status, Banner] record
+      #   A parsed record, either a {Status} or a {Banner} object.
       #
       # @return [Enumerator]
+      #   If no block is given, it will return an Enumerator.
       #
       def self.parse(io)
         return enum_for(__method__) unless block_given?
@@ -127,7 +138,13 @@ module Masscan
       MASSCAN_MAGIC = "masscan/#{MASSCAN_VERSION_FAMILY}"
 
       #
+      # Reads the "pseudo record" at the beginning of the file.
+      #
+      # @param [IO] io
+      #   The IO object to read from.
+      #
       # @return [String]
+      #   The read buffer.
       #
       def self.read_pseudo_record(io)
         buffer = io.read(PSEUDO_RECORD_SIZE)
@@ -144,7 +161,13 @@ module Masscan
       end
 
       #
+      # Reads a multi-byte unsigned integer.
+      #
+      # @param [IO] io
+      #   The IO object to read from.
+      #
       # @return [Integer, nil]
+      #   The unsigned integer, or `nil` if End-of-Stream was reached.
       #
       def self.read_multibyte_uint(io)
         unless (b = io.getbyte)
@@ -165,29 +188,42 @@ module Masscan
       end
 
       #
+      # Decodes a timestamp from an integer.
+      #
       # @param [Integer] timestamp
+      #   The raw UNIX timestamp integer.
       #
       # @return [Time]
+      #   The decoded time value.
       #
       def self.decode_timestamp(timestamp)
         Time.at(timestamp)
       end
 
       #
+      # Decodes an IPv4 address from an integer.
+      #
       # @param [Integer] ip
+      #   The IP in raw integer form.
       #
       # @return [IPAddr]
+      #   The decoded IPv4 address.
       #
       def self.decode_ipv4(ip)
         IPAddr.new(ip,Socket::AF_INET)
       end
 
       #
+      # Decodes an IPv6 address from two 64bit integers.
+      #
       # @param [Integer] ipv6_hi
+      #   The top-half of the 128bit IPv6 address.
       #
       # @param [Integer] ipv6_lo
+      #   The top-half of the 128bit IPv6 address.
       #
       # @return [IPAddr]
+      #   The decoded IPv6 address.
       #
       def self.decode_ipv6(ipv6_hi,ipv6_lo)
         IPAddr.new((ipv6_hi << 64) | ipv6_lo,Socket::AF_INET6)
@@ -204,9 +240,15 @@ module Masscan
       }
 
       #
-      # @param [Integer] proto
+      # Looks up an IP protocol number.
       #
-      # @return [:icmp, :tcp, :udp, :sctp]
+      # @param [Integer] proto
+      #   The IP protocol number.
+      #
+      # @return [:icmp, :tcp, :udp, :sctp, nil]
+      #   The IP protocol keyword.
+      #
+      # @see IP_PROTOCOLS
       #
       def self.lookup_ip_protocol(proto)
         IP_PROTOCOLS[proto]
@@ -247,9 +289,13 @@ module Masscan
       ]
 
       #
+      # Looks up an application protocol number.
+      #
       # @param [Integer] proto
+      #   The application protocol number.
       #
       # @return [Symbol, nil]
+      #   The application protocol keyword.
       #
       # @see APP_PROTOCOLS
       #
@@ -258,9 +304,16 @@ module Masscan
       end
 
       #
+      # Parses a status record.
+      #
       # @param [String] buffer
+      #   The buffer to parse.
       #
       # @param [:open, :closed] status
+      #   Indicates whether the port status is open or closed.
+      #
+      # @return [Status]
+      #   The parsed status record.
       #
       def self.parse_status(buffer,status)
         if buffer.length < 12
@@ -294,7 +347,13 @@ module Masscan
       end
 
       #
+      # Parses a banner record.
+      #
       # @param [String] buffer
+      #   The buffer to parse.
+      #
+      # @return [Buffer]
+      #   The parsed buffer record.
       #
       def self.parse_banner3(buffer)
         timestamp, ip, port, app_proto = buffer.unpack('L>L>S>S>')
@@ -320,7 +379,13 @@ module Masscan
       end
 
       #
+      # Parses a banner record.
+      #
       # @param [String] buffer
+      #   The buffer to parse.
+      #
+      # @return [Buffer]
+      #   The parsed buffer record.
       #
       def self.parse_banner4(buffer)
         if buffer.length < 13
@@ -350,9 +415,16 @@ module Masscan
       end
 
       #
+      # Parses a status record.
+      #
       # @param [String] buffer
+      #   The buffer to parse.
       #
       # @param [:open, :closed] status
+      #   Indicates whether the port status is open or closed.
+      #
+      # @return [Status]
+      #   The parsed status record.
       #
       def self.parse_status2(buffer,status)
         if buffer.length < 13
@@ -379,7 +451,13 @@ module Masscan
       end
 
       #
+      # Parses a banner record.
+      #
       # @param [String] buffer
+      #   The buffer to parse.
+      #
+      # @return [Buffer]
+      #   The parsed buffer record.
       #
       def self.parse_banner9(buffer)
         if buffer.length < 14
@@ -405,9 +483,16 @@ module Masscan
       end
 
       #
+      # Parses a status record.
+      #
       # @param [String] buffer
+      #   The buffer to parse.
       #
       # @param [:open, :closed] status
+      #   Indicates whether the port status is open or closed.
+      #
+      # @return [Status]
+      #   The parsed status record.
       #
       def self.parse_status6(buffer,status)
         timestamp, ip_proto, port, reason, ttl, ip_version, ipv6_hi, ipv6_lo = buffer.unpack('L>CS>CCCQ>Q>')
@@ -438,7 +523,13 @@ module Masscan
       end
 
       #
+      # Parses a banner record.
+      #
       # @param [String] buffer
+      #   The buffer to parse.
+      #
+      # @return [Buffer]
+      #   The parsed buffer record.
       #
       def self.parse_banner6(buffer)
         timestamp, ip_proto, port, app_proto, ttl, ip_version, ipv6_hi, ipv6_lo = buffer.unpack('L>CS>S>CCQ>Q>')
