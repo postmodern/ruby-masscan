@@ -112,7 +112,7 @@ describe Masscan::Parsers::JSON do
           expect(yielded_status.status).to    be(status)
           expect(yielded_status.protocol).to  be(protocol)
           expect(yielded_status.port).to      be(port)
-          expect(yielded_status.reason).to    be(reason)
+          expect(yielded_status.reason).to    eq(reason)
           expect(yielded_status.ttl).to       be(ttl)
           expect(yielded_status.ip).to        eq(ip)
           expect(yielded_status.timestamp).to eq(timestamp)

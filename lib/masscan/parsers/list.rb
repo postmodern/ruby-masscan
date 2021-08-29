@@ -60,6 +60,8 @@ module Masscan
               parse_status(type),
               parse_ip_protocol(ip_proto),
               port.to_i,
+              nil,
+              nil,
               parse_ip(ip),
               parse_timestamp(timestamp)
             )

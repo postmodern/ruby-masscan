@@ -259,6 +259,28 @@ module Masscan
         IP_PROTOCOLS[proto]
       end
 
+      #
+      # Decodes a reason bitflag.
+      #
+      # @param [Integer] reason
+      #   The reason bitflag.
+      #
+      # @return [Array<:fin, :syn, :rst, :psh, :ack, :urg, :ece, :cwr>]
+      #   The reason flags.
+      #
+      def self.decode_reason(reason)
+        flags = []
+        flags << :fin if (reason & 0x01) != 0
+        flags << :syn if (reason & 0x02) != 0
+        flags << :rst if (reason & 0x04) != 0
+        flags << :psh if (reason & 0x08) != 0
+        flags << :ack if (reason & 0x10) != 0
+        flags << :urg if (reason & 0x20) != 0
+        flags << :ece if (reason & 0x40) != 0
+        flags << :cwr if (reason & 0x80) != 0
+        flags
+      end
+
       # List of application protocol keywords.
       APP_PROTOCOLS = [
         nil,
@@ -330,6 +352,7 @@ module Masscan
 
         timestamp = decode_timestamp(timestamp)
         ip        = decode_ipv4(ip)
+        reason    = decode_reason(reason)
 
         # if ARP, there will be a MAC address after the record
         mac = if ip == 0 && buffer.length >= 12+6
@@ -441,6 +464,7 @@ module Masscan
         timestamp = decode_timestamp(timestamp)
         ip        = decode_ipv4(ip)
         ip_proto  = lookup_ip_protocol(ip_proto)
+        reason    = decode_reason(reason)
 
         mac = if ip == 0 && buffer.length >= 13+6
                 buffer[13,6]
@@ -450,6 +474,8 @@ module Masscan
           status,
           ip_proto,
           port,
+          reason,
+          ttl,
           ip,
           timestamp,
           mac
@@ -517,12 +543,15 @@ module Masscan
 
         timestamp = decode_timestamp(timestamp)
         ip_proto  = lookup_ip_protocol(ip_proto)
+        reason    = decode_reason(reason)
         ipv6      = decode_ipv6(ipv6_hi,ipv6_lo)
 
         return Status.new(
           status,
           ip_proto,
           port,
+          reason,
+          ttl,
           ipv6,
           timestamp
         )

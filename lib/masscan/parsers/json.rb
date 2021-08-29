@@ -83,11 +83,15 @@ module Masscan
                   )
                 else
                   status = parse_status(port_json['status'])
+                  ttl    = port_json['ttl']
+                  reason = parse_reason(port_json['reason'])
 
                   yield Status.new(
                     status,
                     proto,
                     port,
+                    reason,
+                    ttl,
                     ip,
                     timestamp
                   )
