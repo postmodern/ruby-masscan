@@ -25,6 +25,32 @@ module Masscan
         STATUSES[status] || status
       end
 
+      REASONS = {
+        'fin' => :fin,
+        'syn' => :syn,
+        'rst' => :rst,
+        'psh' => :psh,
+        'ack' => :ack,
+        'urg' => :urg,
+        'ece' => :ece,
+        'cwr' => :cwr
+      }
+
+      #
+      # Parses a reason string.
+      #
+      # @param [String] reason
+      #   The reason string to parse.
+      #
+      # @return [Array<:fin, :syn, :rst, :psh, :ack, :urg, :ece, :cwr>]
+      #   The reason keywords or a String if the flag wasn't in {REASONS}.
+      #
+      def parse_reason(reason)
+        flags = reason.split('-')
+        flags.map! { |flag| REASONS[flag] || flag }
+        flags
+      end
+
       # Mapping of IP protocol names to their keywords.
       IP_PROTOCOLS = {
         'tcp'  => :tcp,

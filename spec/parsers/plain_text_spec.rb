@@ -28,6 +28,26 @@ describe Masscan::Parsers::PlainText do
     end
   end
 
+  describe "#parse_reason" do
+    context "when given one flag" do
+      it "must map it to a keyword and return an Array" do
+        expect(subject.parse_reason("rst")).to eq([:rst])
+      end
+    end
+
+    context "when given multiple flags" do
+      it "must split them and map them to keyword" do
+        expect(subject.parse_reason("syn-ack")).to eq([:syn, :ack])
+      end
+    end
+
+    context "when given an unknown String" do
+      it "must return the String" do
+        expect(subject.parse_reason("foo")).to eq(["foo"])
+      end
+    end
+  end
+
   describe "#parse_ip_protocol" do
     context "when given 'tcp'" do
       it "must return :tcp" do
