@@ -1,4 +1,4 @@
-require 'masscan/parsers/common'
+require 'masscan/parsers/plain_text'
 require 'masscan/status'
 require 'masscan/banner'
 
@@ -13,6 +13,8 @@ module Masscan
     # @api semipublic
     #
     module JSON
+      extend PlainText
+
       #
       # Opens a JSON file for parsing.
       #
@@ -32,8 +34,6 @@ module Masscan
       def self.open(path,&block)
         File.open(path,&block)
       end
-
-      extend Common
 
       #
       # Parses the masscan JSON or ndjson data.

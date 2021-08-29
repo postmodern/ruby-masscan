@@ -1,11 +1,11 @@
 module Masscan
   module Parsers
     #
-    # Common parsing methods, primarily for parsing plain-text data.
+    # Common methods for parsing plain-text data.
     #
     # @api private
     #
-    module Common
+    module PlainText
       # Mapping of status strings to their keywords.
       STATUSES = {
         'open'   => :open,
