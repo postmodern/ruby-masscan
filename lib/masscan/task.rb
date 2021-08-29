@@ -175,20 +175,5 @@ module Masscan
       }.join(',')
     end
 
-    #
-    # Formats a protocol list.
-    #
-    # @param [Array<Integer,Range>] protocols
-    #   The IP protocol numbers.
-    #
-    # @return [String]
-    #   Comma separated string.
-    #
-    def self.format_protocol_list(protocols)
-      # NOTE: the man page says the protocol list is similar to the format of
-      # a port range.
-      format_port_list(protocols)
-    end
-
   end
 end
