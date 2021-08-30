@@ -158,7 +158,7 @@ module Masscan
         end
 
         unless buffer.start_with?(MASSCAN_MAGIC)
-          raise(CorruptedFile,"unknown file format (expected #{MASSCAN_MAGIC}")
+          raise(CorruptedFile,"unknown file format (expected #{MASSCAN_MAGIC})")
         end
 
         return buffer
