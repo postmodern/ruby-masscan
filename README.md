@@ -1,7 +1,6 @@
 # ruby-masscan
 
 [![CI](https://github.com/postmodern/ruby-masscan/actions/workflows/ruby.yml/badge.svg)](https://github.com/postmodern/ruby-masscan/actions/workflows/ruby.yml)
-[![Code Climate](https://codeclimate.com/github/postmodern/ruby-masscan.svg)](https://codeclimate.com/github/postmodern/ruby-masscan)
 [![Gem Version](https://badge.fury.io/rb/ruby-masscan.svg)](https://badge.fury.io/rb/ruby-masscan)
 
 * [Source](https://github.com/postmodern/ruby-masscan/)
