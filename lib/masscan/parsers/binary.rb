@@ -582,6 +582,9 @@ module Masscan
         app_proto = lookup_app_protocol(app_proto)
         ipv6      = decode_ipv6(ipv6_hi,ipv6_lo)
 
+        offset  = 27 # 4 + 1 + 2 + 2 + 1 + 1 + 8 + 8
+        payload = buffer[offset..-1]
+
         return Banner.new(
           ip_proto,
           port,
