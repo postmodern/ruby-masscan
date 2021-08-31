@@ -385,7 +385,7 @@ module Masscan
       #   The parsed buffer record.
       #
       def self.parse_banner3(buffer)
-        timestamp, ip, port, app_proto = buffer.unpack('L>L>S>S>')
+        timestamp, ip, port, app_proto, payload = buffer.unpack('L>L>S>S>A*')
 
         timestamp = decode_timestamp(timestamp)
         ip        = decode_ipv4(ip)
@@ -394,8 +394,6 @@ module Masscan
         # defaults
         ip_proto = :tcp
         ttl = 0
-
-        payload = buffer[12..-1]
 
         return Banner.new(
           ip_proto,
@@ -421,7 +419,7 @@ module Masscan
           return
         end
 
-        timestamp, ip, ip_prot, port, app_proto = buffer.unpack('L>L>CS>S>')
+        timestamp, ip, ip_prot, port, app_proto, payload = buffer.unpack('L>L>CS>S>A*')
 
         timestamp = decode_timestamp(timestamp)
         ip        = decode_ipv4(ip)
@@ -431,15 +429,13 @@ module Masscan
         # defaults
         ttl = 0
 
-        banner = buffer[13..-1]
-
         return Banner.new(
           ip_proto,
           port,
           ip,
           timestamp,
           app_proto,
-          banner
+          payload
         )
       end
 
@@ -496,13 +492,11 @@ module Masscan
           return
         end
 
-        timestamp, ip, ip_proto, port, app_proto, ttl = buffer.unpack('L>L>CS>S>C')
+        timestamp, ip, ip_proto, port, app_proto, ttl, payload = buffer.unpack('L>L>CS>S>CA*')
         timestamp = decode_timestamp(timestamp)
         ip        = decode_ipv4(ip)
         ip_proto  = lookup_ip_protocol(ip_proto)
         app_proto = lookup_app_protocol(app_proto)
-
-        payload = buffer[14..-1]
 
         return Banner.new(
           ip_proto,
@@ -567,7 +561,7 @@ module Masscan
       #   The parsed buffer record.
       #
       def self.parse_banner6(buffer)
-        timestamp, ip_proto, port, app_proto, ttl, ip_version, ipv6_hi, ipv6_lo = buffer.unpack('L>CS>S>CCQ>Q>')
+        timestamp, ip_proto, port, app_proto, ttl, ip_version, ipv6_hi, ipv6_lo, payload = buffer.unpack('L>CS>S>CCQ>Q>A*')
         timestamp  ||= 0xffffffff
         protocol   ||= 0xff
         port       ||= 0xffff
@@ -581,9 +575,6 @@ module Masscan
         ip_proto  = lookup_ip_protocol(ip_proto)
         app_proto = lookup_app_protocol(app_proto)
         ipv6      = decode_ipv6(ipv6_hi,ipv6_lo)
-
-        offset  = 27 # 4 + 1 + 2 + 2 + 1 + 1 + 8 + 8
-        payload = buffer[offset..-1]
 
         return Banner.new(
           ip_proto,
