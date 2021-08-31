@@ -122,10 +122,10 @@ describe Masscan::Parsers::JSON do
           let(:service_name)    { "http.server" }
           let(:service_keyword) { :http_server  }
 
-          let(:banner) { "ECS (sec/974D)" }
+          let(:payload) { "ECS (sec/974D)" }
 
           let(:line) do
-            %{{   "ip": "#{ip}",   "timestamp": "#{timestamp.to_i}", "ports": [ {"port": #{port}, "proto": "#{protocol}", "service": {"name": "#{service_name}", "banner": "#{banner}"} } ] }}
+            %{{   "ip": "#{ip}",   "timestamp": "#{timestamp.to_i}", "ports": [ {"port": #{port}, "proto": "#{protocol}", "service": {"name": "#{service_name}", "banner": "#{payload}"} } ] }}
           end
 
           let(:io) { StringIO.new(line) }
@@ -148,7 +148,7 @@ describe Masscan::Parsers::JSON do
             expect(yielded_banner.timestamp).to eq(timestamp)
 
             expect(yielded_banner.service).to eq(service_keyword)
-            expect(yielded_banner.banner).to  eq(banner)
+            expect(yielded_banner.payload).to eq(payload)
           end
         end
       end

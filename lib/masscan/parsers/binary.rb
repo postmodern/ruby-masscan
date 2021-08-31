@@ -395,7 +395,7 @@ module Masscan
         ip_proto = :tcp
         ttl = 0
 
-        banner = buffer[12..-1]
+        payload = buffer[12..-1]
 
         return Banner.new(
           ip_proto,
@@ -403,7 +403,7 @@ module Masscan
           ip,
           timestamp,
           app_proto,
-          banner
+          payload
         )
       end
 
@@ -502,7 +502,7 @@ module Masscan
         ip_proto  = lookup_ip_protocol(ip_proto)
         app_proto = lookup_app_protocol(app_proto)
 
-        banner = buffer[14..-1]
+        payload = buffer[14..-1]
 
         return Banner.new(
           ip_proto,
@@ -510,7 +510,7 @@ module Masscan
           ip,
           timestamp,
           app_proto,
-          banner
+          payload
         )
       end
 
@@ -588,7 +588,7 @@ module Masscan
           ipv6,
           timestamp,
           app_proto,
-          banner
+          payload
         )
       end
 
