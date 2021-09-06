@@ -419,7 +419,7 @@ module Masscan
           return
         end
 
-        timestamp, ip, ip_prot, port, app_proto, payload = buffer.unpack('L>L>CS>S>A*')
+        timestamp, ip, ip_proto, port, app_proto, payload = buffer.unpack('L>L>CS>S>A*')
 
         timestamp = decode_timestamp(timestamp)
         ip        = decode_ipv4(ip)
