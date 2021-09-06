@@ -221,4 +221,389 @@ describe Masscan::Parsers::Binary do
       end
     end
   end
+
+  describe ".parser_banner3" do
+    let(:timestamp) { 1629960470         }
+    let(:time)      { Time.at(timestamp) }
+
+    let(:ipaddr)  { IPAddr.new("1.2.3.4") }
+    let(:ip_uint) { ipaddr.to_i           }
+
+    let(:port) { 1111 }
+
+    let(:app_proto) { :html_title }
+    let(:app_proto_uint) do
+      described_class::APP_PROTOCOLS.index(app_proto)
+    end
+
+    let(:payload) { "404 - Not Found" }
+
+    let(:buffer) do
+      p([timestamp, ip_uint, port, app_proto_uint, payload]).pack("L>L>S>S>A*")
+    end
+
+    subject { super().parse_banner3(buffer) }
+
+    it "must default #ip_proto to :tcp" do
+      expect(subject.protocol).to eq(:tcp)
+    end
+
+    it "must default #ttl to 0" do
+      pending "TODO: need to add Banner#ttl"
+
+      expect(subject.ttl).to eq(0)
+    end
+
+    it "must decode the port field" do
+      expect(subject.port).to eq(port)
+    end
+
+    it "must decode the ip field" do
+      expect(subject.ip).to eq(ipaddr)
+    end
+
+    it "must decode the timestamp field" do
+      expect(subject.timestamp).to eq(time)
+    end
+
+    it "must decode the app_proto field" do
+      expect(subject.app_protocol).to eq(app_proto)
+    end
+
+    it "must decode the payload field" do
+      expect(subject.payload).to eq(payload)
+    end
+  end
+
+  describe ".parser_banner4" do
+    let(:timestamp) { 1629960470         }
+    let(:time)      { Time.at(timestamp) }
+
+    let(:ipaddr)  { IPAddr.new("1.2.3.4") }
+    let(:ip_uint) { ipaddr.to_i           }
+
+    let(:ip_proto)      { :tcp }
+    let(:ip_proto_uint) { described_class::IP_PROTOCOLS.invert[:tcp] }
+
+    let(:port) { 1111 }
+
+    let(:app_proto) { :html_title }
+    let(:app_proto_uint) do
+      described_class::APP_PROTOCOLS.index(app_proto)
+    end
+
+    let(:payload) { "404 - Not Found" }
+
+    let(:buffer) do
+      [
+        timestamp, ip_uint, ip_proto_uint, port, app_proto_uint, payload
+      ].pack("L>L>CS>S>A*")
+    end
+
+    subject { super().parse_banner4(buffer) }
+
+    context "when the buffer length is less than 13" do
+      let(:buffer) { "A" * 12 }
+
+      it "must return nil" do
+        expect(subject).to be(nil)
+      end
+    end
+
+    it "must decode the ip_proto field" do
+      expect(subject.protocol).to eq(:tcp)
+    end
+
+    it "must default #ttl to 0" do
+      pending "TODO: need to add Banner#ttl"
+
+      expect(subject.ttl).to eq(0)
+    end
+
+    it "must decode the port field" do
+      expect(subject.port).to eq(port)
+    end
+
+    it "must decode the ip field" do
+      expect(subject.ip).to eq(ipaddr)
+    end
+
+    it "must decode the timestamp field" do
+      expect(subject.timestamp).to eq(time)
+    end
+
+    it "must decode the app_proto field" do
+      expect(subject.app_protocol).to eq(app_proto)
+    end
+
+    it "must decode the payload field" do
+      expect(subject.payload).to eq(payload)
+    end
+  end
+
+  describe ".parse_status2" do
+    let(:timestamp) { 1629960470         }
+    let(:time)      { Time.at(timestamp) }
+
+    let(:ipaddr)  { IPAddr.new("1.2.3.4") }
+    let(:ip_uint) { ipaddr.to_i           }
+
+    let(:ip_proto)      { :tcp }
+    let(:ip_proto_uint) { described_class::IP_PROTOCOLS.invert[:tcp] }
+
+    let(:port) { 1111 }
+
+    let(:ttl) { 54 }
+
+    let(:reason)      { [:syn, :ack] }
+    let(:reason_uint) { 0x02 | 0x10  }
+
+    let(:buffer) do
+      [
+        timestamp, ip_uint, ip_proto_uint, port, reason_uint, ttl 
+      ].pack("L>L>CS>CC")
+    end
+
+    let(:status) { :open }
+
+    subject { super().parse_status2(buffer,status) }
+
+    context "when the buffer length is less than 13" do
+      let(:buffer) { "A" * 12 }
+
+      it "must return nil" do
+        expect(subject).to be(nil)
+      end
+    end
+
+    it "must decode the timestamp field" do
+      expect(subject.timestamp).to eq(time)
+    end
+
+    it "must set #status" do
+      expect(subject.status).to eq(status)
+    end
+
+    it "must decode the ip field" do
+      expect(subject.ip).to eq(ipaddr)
+    end
+
+    it "must decode the ip_proto field" do
+      expect(subject.protocol).to eq(ip_proto)
+    end
+
+    it "must decode the port field" do
+      expect(subject.port).to eq(port)
+    end
+
+    it "must decode the ttl field" do
+      expect(subject.ttl).to eq(ttl)
+    end
+
+    it "must decode the reason field" do
+      expect(subject.reason).to eq(reason)
+    end
+  end
+
+  describe ".parser_banner9" do
+    let(:timestamp) { 1629960470         }
+    let(:time)      { Time.at(timestamp) }
+
+    let(:ipaddr)  { IPAddr.new("1.2.3.4") }
+    let(:ip_uint) { ipaddr.to_i           }
+
+    let(:ip_proto)      { :tcp }
+    let(:ip_proto_uint) { described_class::IP_PROTOCOLS.invert[:tcp] }
+
+    let(:port) { 1111 }
+
+    let(:app_proto) { :html_title }
+    let(:app_proto_uint) do
+      described_class::APP_PROTOCOLS.index(app_proto)
+    end
+
+    let(:ttl) { 54 }
+
+    let(:payload) { "404 - Not Found" }
+
+    let(:buffer) do
+      [
+        timestamp, ip_uint, ip_proto_uint, port, app_proto_uint, ttl, payload
+      ].pack("L>L>CS>S>CA*")
+    end
+
+    subject { super().parse_banner9(buffer) }
+
+    context "when the buffer length is less than 14" do
+      let(:buffer) { "A" * 13 }
+
+      it "must return nil" do
+        expect(subject).to be(nil)
+      end
+    end
+
+    it "must decode the ip_proto field" do
+      expect(subject.protocol).to eq(:tcp)
+    end
+
+    it "must default #ttl to 0" do
+      pending "TODO: need to add Banner#ttl"
+
+      expect(subject.ttl).to eq(0)
+    end
+
+    it "must decode the port field" do
+      expect(subject.port).to eq(port)
+    end
+
+    it "must decode the ip field" do
+      expect(subject.ip).to eq(ipaddr)
+    end
+
+    it "must decode the timestamp field" do
+      expect(subject.timestamp).to eq(time)
+    end
+
+    it "must decode the app_proto field" do
+      expect(subject.app_protocol).to eq(app_proto)
+    end
+
+    it "must decode the payload field" do
+      expect(subject.payload).to eq(payload)
+    end
+  end
+
+  describe ".parse_status6" do
+    let(:timestamp) { 1629960470         }
+    let(:time)      { Time.at(timestamp) }
+
+    let(:ipaddr)  { IPAddr.new("2606:2800:220:1:248:1893:25c8:1946") }
+    let(:ip_uint) { ipaddr.to_i }
+    let(:ipv6_hi) { (ip_uint & (0xffffffff_ffffffff << 64)) >> 64 }
+    let(:ipv6_lo) { (ip_uint & 0xffffffff_ffffffff) }
+
+    let(:ip_version) { 6 }
+
+    let(:ip_proto)      { :tcp }
+    let(:ip_proto_uint) { described_class::IP_PROTOCOLS.invert[:tcp] }
+
+    let(:port) { 1111 }
+
+    let(:ttl) { 54 }
+
+    let(:reason)      { [:syn, :ack] }
+    let(:reason_uint) { 0x02 | 0x10  }
+
+    let(:buffer) do
+      [
+        timestamp, ip_proto_uint, port, reason_uint, ttl, ip_version, ipv6_hi, ipv6_lo
+      ].pack("L>CS>CCCQ>Q>")
+    end
+
+    let(:status) { :open }
+
+    subject { super().parse_status6(buffer,status) }
+
+    context "if the ip_version is not 6" do
+      let(:ip_version) { 9 }
+
+      it do
+        expect {
+          described_class.parse_status6(buffer,status)
+        }.to raise_error(described_class::CorruptedFile,"expected ip_version to be 6: #{ip_version.inspect}")
+      end
+    end
+
+    it "must decode the timestamp field" do
+      expect(subject.timestamp).to eq(time)
+    end
+
+    it "must set #status" do
+      expect(subject.status).to eq(status)
+    end
+
+    it "must decode the ip field" do
+      expect(subject.ip).to eq(ipaddr)
+    end
+
+    it "must decode the ip_proto field" do
+      expect(subject.protocol).to eq(ip_proto)
+    end
+
+    it "must decode the port field" do
+      expect(subject.port).to eq(port)
+    end
+
+    it "must decode the ttl field" do
+      expect(subject.ttl).to eq(ttl)
+    end
+
+    it "must decode the reason field" do
+      expect(subject.reason).to eq(reason)
+    end
+  end
+
+  describe ".parser_banner6" do
+    let(:timestamp) { 1629960470         }
+    let(:time)      { Time.at(timestamp) }
+
+    let(:ipaddr)  { IPAddr.new("2606:2800:220:1:248:1893:25c8:1946") }
+    let(:ip_uint) { ipaddr.to_i }
+    let(:ipv6_hi) { (ip_uint & (0xffffffff_ffffffff << 64)) >> 64 }
+    let(:ipv6_lo) { (ip_uint & 0xffffffff_ffffffff) }
+
+    let(:ip_version) { 6 }
+
+    let(:ip_proto)      { :tcp }
+    let(:ip_proto_uint) { described_class::IP_PROTOCOLS.invert[:tcp] }
+
+    let(:port) { 1111 }
+
+    let(:app_proto) { :html_title }
+    let(:app_proto_uint) do
+      described_class::APP_PROTOCOLS.index(app_proto)
+    end
+
+    let(:ttl) { 54 }
+
+    let(:payload) { "404 - Not Found" }
+
+    let(:buffer) do
+      [
+        timestamp, ip_proto_uint, port, app_proto_uint, ttl, ip_version, ipv6_hi, ipv6_lo, payload
+      ].pack("L>CS>S>CCQ>Q>A*")
+    end
+
+    subject { super().parse_banner6(buffer) }
+
+    it "must decode the ip_proto field" do
+      expect(subject.protocol).to eq(:tcp)
+    end
+
+    it "must default #ttl to 0" do
+      pending "TODO: need to add Banner#ttl"
+
+      expect(subject.ttl).to eq(0)
+    end
+
+    it "must decode the port field" do
+      expect(subject.port).to eq(port)
+    end
+
+    it "must decode the ip field" do
+      expect(subject.ip).to eq(ipaddr)
+    end
+
+    it "must decode the timestamp field" do
+      expect(subject.timestamp).to eq(time)
+    end
+
+    it "must decode the app_proto field" do
+      expect(subject.app_protocol).to eq(app_proto)
+    end
+
+    it "must decode the payload field" do
+      expect(subject.payload).to eq(payload)
+    end
+  end
 end
