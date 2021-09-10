@@ -222,6 +222,133 @@ describe Masscan::Parsers::Binary do
     end
   end
 
+  describe ".parse_status" do
+    let(:timestamp) { 1629960470         }
+    let(:time)      { Time.at(timestamp) }
+
+    let(:ipaddr)  { IPAddr.new("1.2.3.4") }
+    let(:ip_uint) { ipaddr.to_i           }
+
+    let(:ip_proto)      { :tcp }
+    let(:ip_proto_uint) { described_class::IP_PROTOCOLS.invert[:tcp] }
+
+    let(:port) { 1111 }
+
+    let(:ttl) { 54 }
+
+    let(:reason)      { [:syn, :ack] }
+    let(:reason_uint) { 0x02 | 0x10  }
+
+    let(:buffer) do
+      [
+        timestamp, ip_uint, port, reason_uint, ttl 
+      ].pack("L>L>S>CC")
+    end
+
+    let(:status) { :open }
+
+    subject { super().parse_status(buffer,status) }
+
+    context "when the buffer length is less than 12" do
+      let(:buffer) { "A" * 11 }
+
+      it "must return nil" do
+        expect(subject).to be(nil)
+      end
+    end
+
+    it "must decode the timestamp field" do
+      expect(subject.timestamp).to eq(time)
+    end
+
+    it "must set #status" do
+      expect(subject.status).to eq(status)
+    end
+
+    it "must decode the ip field" do
+      expect(subject.ip).to eq(ipaddr)
+    end
+
+    context "when the port is 53" do
+      let(:port) { 53 }
+      let(:ip_proto) { :udp }
+
+      it "must default the ip_proto :udp" do
+        expect(subject.protocol).to eq(ip_proto)
+      end
+    end
+
+    context "when the port is 123" do
+      let(:port) { 123 }
+      let(:ip_proto) { :udp }
+
+      it "must default the ip_proto :udp" do
+        expect(subject.protocol).to eq(ip_proto)
+      end
+    end
+
+    context "when the port is 137" do
+      let(:port) { 137 }
+      let(:ip_proto) { :udp }
+
+      it "must default the ip_proto :udp" do
+        expect(subject.protocol).to eq(ip_proto)
+      end
+    end
+
+    context "when the port is 161" do
+      let(:port) { 161 }
+      let(:ip_proto) { :udp }
+
+      it "must default the ip_proto :udp" do
+        expect(subject.protocol).to eq(ip_proto)
+      end
+    end
+
+    context "when the port is 36422" do
+      let(:port)     { 36422 }
+      let(:ip_proto) { :sctp }
+
+      it "must default the ip_proto :sctp" do
+        expect(subject.protocol).to eq(ip_proto)
+      end
+    end
+
+    context "when the port is 36412" do
+      let(:port)     { 36412 }
+      let(:ip_proto) { :sctp }
+
+      it "must default the ip_proto :sctp" do
+        expect(subject.protocol).to eq(ip_proto)
+      end
+    end
+
+    context "when the port is 2905" do
+      let(:port)     { 2905 }
+      let(:ip_proto) { :sctp }
+
+      it "must default the ip_proto :sctp" do
+        expect(subject.protocol).to eq(ip_proto)
+      end
+    end
+
+    it "must default the ip_proto to :tcp" do
+      expect(subject.protocol).to eq(:tcp)
+    end
+
+    it "must decode the port field" do
+      expect(subject.port).to eq(port)
+    end
+
+    it "must decode the ttl field" do
+      expect(subject.ttl).to eq(ttl)
+    end
+
+    it "must decode the reason field" do
+      expect(subject.reason).to eq(reason)
+    end
+  end
+
   describe ".parser_banner3" do
     let(:timestamp) { 1629960470         }
     let(:time)      { Time.at(timestamp) }
