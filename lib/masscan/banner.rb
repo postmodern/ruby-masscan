@@ -7,7 +7,7 @@ module Masscan
     #
     # Initializes the banner.
     #
-    # @param [:icmp, :tcp, :udp] protocol
+    # @param [:icmp, :tcp, :udp, :sctp] protocol
     #   The IP protocol.
     #
     # @param [Integer] port

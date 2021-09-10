@@ -10,7 +10,7 @@ module Masscan
     # @param [:open, :closed] status
     #   The status of the port.
     #
-    # @param [:icmp, :tcp, :udp] protocol
+    # @param [:icmp, :tcp, :udp, :sctp] protocol
     #   The IP protocol.
     #
     # @param [Integer] port
