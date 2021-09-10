@@ -369,6 +369,8 @@ module Masscan
           status,
           protocol,
           port,
+          reason,
+          ttl,
           ip,
           timestamp,
           mac
