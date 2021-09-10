@@ -376,8 +376,6 @@ describe Masscan::Parsers::Binary do
     end
 
     it "must default #ttl to 0" do
-      pending "TODO: need to add Banner#ttl"
-
       expect(subject.ttl).to eq(0)
     end
 
@@ -442,8 +440,6 @@ describe Masscan::Parsers::Binary do
     end
 
     it "must default #ttl to 0" do
-      pending "TODO: need to add Banner#ttl"
-
       expect(subject.ttl).to eq(0)
     end
 
@@ -573,10 +569,8 @@ describe Masscan::Parsers::Binary do
       expect(subject.protocol).to eq(:tcp)
     end
 
-    it "must default #ttl to 0" do
-      pending "TODO: need to add Banner#ttl"
-
-      expect(subject.ttl).to eq(0)
+    it "must decode the ttl field" do
+      expect(subject.ttl).to eq(ttl)
     end
 
     it "must decode the port field" do
@@ -707,10 +701,8 @@ describe Masscan::Parsers::Binary do
       expect(subject.protocol).to eq(:tcp)
     end
 
-    it "must default #ttl to 0" do
-      pending "TODO: need to add Banner#ttl"
-
-      expect(subject.ttl).to eq(0)
+    it "must decode the ttl field" do
+      expect(subject.ttl).to eq(ttl)
     end
 
     it "must decode the port field" do

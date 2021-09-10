@@ -400,6 +400,7 @@ module Masscan
         return Banner.new(
           protocol:     ip_proto,
           port:         port,
+          ttl:          ttl,
           ip:           ip,
           timestamp:    timestamp,
           app_protocol: app_proto,
@@ -434,6 +435,7 @@ module Masscan
         return Banner.new(
           protocol:     ip_proto,
           port:         port,
+          ttl:          ttl,
           ip:           ip,
           timestamp:    timestamp,
           app_protocol: app_proto,
@@ -503,6 +505,7 @@ module Masscan
         return Banner.new(
           protocol:     ip_proto,
           port:         port,
+          ttl:          ttl,
           ip:           ip,
           timestamp:    timestamp,
           app_protocol: app_proto,
@@ -581,6 +584,7 @@ module Masscan
         return Banner.new(
           protocol:     ip_proto,
           port:         port,
+          ttl:          ttl,
           ip:           ipv6,
           timestamp:    timestamp,
           app_protocol: app_proto,

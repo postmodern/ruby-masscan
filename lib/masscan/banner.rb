@@ -2,7 +2,7 @@ module Masscan
   #
   # Represents a banner record.
   #
-  class Banner < Struct.new(:protocol,:port,:ip,:timestamp,:app_protocol,:payload)
+  class Banner < Struct.new(:protocol,:port,:ttl,:ip,:timestamp,:app_protocol,:payload)
 
     #
     # Initializes the banner.
@@ -12,6 +12,9 @@ module Masscan
     #
     # @param [Integer] port
     #   The port number.
+    #
+    # @param [Integer, nil] ttl
+    #   The optional TTL.
     #
     # @praam [IPAddr] ip
     #   The IP address.
@@ -27,8 +30,8 @@ module Masscan
     #
     # @api private
     #
-    def initialize(protocol: , port: , ip: , timestamp: , app_protocol: , payload: )
-      super(protocol,port,ip,timestamp,app_protocol,payload)
+    def initialize(protocol: , port: , ttl: nil, ip: , timestamp: , app_protocol: , payload: )
+      super(protocol,port,ttl,ip,timestamp,app_protocol,payload)
     end
 
     alias service app_protocol
