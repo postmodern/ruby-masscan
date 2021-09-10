@@ -16,7 +16,7 @@ module Masscan
     # @param [Integer, nil] ttl
     #   The optional TTL.
     #
-    # @praam [IPAddr] ip
+    # @param [IPAddr] ip
     #   The IP address.
     #
     # @param [Time] timestamp
