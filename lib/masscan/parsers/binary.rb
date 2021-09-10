@@ -366,14 +366,14 @@ module Masscan
                    end
 
         return Status.new(
-          status,
-          protocol,
-          port,
-          reason,
-          ttl,
-          ip,
-          timestamp,
-          mac
+          status:    status,
+          protocol:  protocol,
+          port:      port,
+          reason:    reason,
+          ttl:       ttl,
+          ip:        ip,
+          timestamp: timestamp,
+          mac:       mac
         )
       end
 
@@ -398,12 +398,12 @@ module Masscan
         ttl = 0
 
         return Banner.new(
-          ip_proto,
-          port,
-          ip,
-          timestamp,
-          app_proto,
-          payload
+          protocol:     ip_proto,
+          port:         port,
+          ip:           ip,
+          timestamp:    timestamp,
+          app_protocol: app_proto,
+          payload:      payload
         )
       end
 
@@ -432,12 +432,12 @@ module Masscan
         ttl = 0
 
         return Banner.new(
-          ip_proto,
-          port,
-          ip,
-          timestamp,
-          app_proto,
-          payload
+          protocol:     ip_proto,
+          port:         port,
+          ip:           ip,
+          timestamp:    timestamp,
+          app_protocol: app_proto,
+          payload:      payload
         )
       end
 
@@ -469,14 +469,14 @@ module Masscan
               end
 
         return Status.new(
-          status,
-          ip_proto,
-          port,
-          reason,
-          ttl,
-          ip,
-          timestamp,
-          mac
+          status:    status,
+          protocol:  ip_proto,
+          port:      port,
+          reason:    reason,
+          ttl:       ttl,
+          ip:        ip,
+          timestamp: timestamp,
+          mac:       mac
         )
       end
 
@@ -501,12 +501,12 @@ module Masscan
         app_proto = lookup_app_protocol(app_proto)
 
         return Banner.new(
-          ip_proto,
-          port,
-          ip,
-          timestamp,
-          app_proto,
-          payload
+          protocol:     ip_proto,
+          port:         port,
+          ip:           ip,
+          timestamp:    timestamp,
+          app_protocol: app_proto,
+          payload:      payload
         )
       end
 
@@ -543,13 +543,13 @@ module Masscan
         ipv6      = decode_ipv6(ipv6_hi,ipv6_lo)
 
         return Status.new(
-          status,
-          ip_proto,
-          port,
-          reason,
-          ttl,
-          ipv6,
-          timestamp
+          status:    status,
+          protocol:  ip_proto,
+          port:      port,
+          reason:    reason,
+          ttl:       ttl,
+          ip:        ipv6,
+          timestamp: timestamp
         )
       end
 
@@ -579,12 +579,12 @@ module Masscan
         ipv6      = decode_ipv6(ipv6_hi,ipv6_lo)
 
         return Banner.new(
-          ip_proto,
-          port,
-          ipv6,
-          timestamp,
-          app_proto,
-          payload
+          protocol:     ip_proto,
+          port:         port,
+          ip:           ipv6,
+          timestamp:    timestamp,
+          app_protocol: app_proto,
+          payload:      payload
         )
       end
 

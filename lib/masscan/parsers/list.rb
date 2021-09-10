@@ -57,24 +57,22 @@ module Masscan
             type, ip_proto, port, ip, timestamp = line.split(' ',5)
 
             yield Status.new(
-              parse_status(type),
-              parse_ip_protocol(ip_proto),
-              port.to_i,
-              nil,
-              nil,
-              parse_ip(ip),
-              parse_timestamp(timestamp)
+              status:    parse_status(type),
+              protocol:  parse_ip_protocol(ip_proto),
+              port:      port.to_i,
+              ip:        parse_ip(ip),
+              timestamp: parse_timestamp(timestamp)
             )
           elsif line.start_with?('banner ')
             type, ip_proto, port, ip, timestamp, app_proto, banner = line.split(' ',7)
 
             yield Banner.new(
-              parse_ip_protocol(ip_proto),
-              port.to_i,
-              parse_ip(ip),
-              parse_timestamp(timestamp),
-              parse_app_protocol(app_proto),
-              banner
+              protocol:     parse_ip_protocol(ip_proto),
+              port:         port.to_i,
+              ip:           parse_ip(ip),
+              timestamp:    parse_timestamp(timestamp),
+              app_protocol: parse_app_protocol(app_proto),
+              payload:      banner
             )
           end
         end

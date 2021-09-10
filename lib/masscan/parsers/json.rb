@@ -74,12 +74,12 @@ module Masscan
                   service_banner = service_json['banner']
 
                   yield Banner.new(
-                    proto,
-                    port,
-                    ip,
-                    timestamp,
-                    service_name,
-                    service_banner
+                    protocol:     proto,
+                    port:         port,
+                    ip:           ip,
+                    timestamp:    timestamp,
+                    app_protocol: service_name,
+                    payload:      service_banner
                   )
                 else
                   status = parse_status(port_json['status'])
@@ -87,13 +87,13 @@ module Masscan
                   reason = parse_reason(port_json['reason'])
 
                   yield Status.new(
-                    status,
-                    proto,
-                    port,
-                    reason,
-                    ttl,
-                    ip,
-                    timestamp
+                    status:    status,
+                    protocol:  proto,
+                    port:      port,
+                    reason:    reason,
+                    ttl:       ttl,
+                    ip:        ip,
+                    timestamp: timestamp
                   )
                 end
               end
