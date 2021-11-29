@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rspec'
 require 'simplecov'
 SimpleCov.start
 
