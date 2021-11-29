@@ -22,7 +22,7 @@ required_ruby_version: ">= 2.0.0"
 requirements: masscan >= 1.0.0
 
 dependencies:
-  rprogram: ~> 0.3
+  command_mapper: ~> 0.1
 
 development_dependencies:
   bundler: ~> 2.0

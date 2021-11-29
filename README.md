@@ -23,9 +23,9 @@ file formats.
 Run `sudo masscan` from Ruby:
 
 ```ruby
-require 'masscan/program'
+require 'masscan/command'
 
-Masscan::Program.sudo_scan do |masscan|
+Masscan::Command.sudo do |masscan|
   masscan.output_format = :list
   masscan.output_file   = 'masscan.txt'
 
@@ -108,7 +108,7 @@ end
 
 * [ruby] >= 2.0.0
 * [masscan] >= 1.0.0
-* [rprogram] ~> 0.3
+* [command_mapper] ~> 0.1
 
 ## Install
 
@@ -136,4 +136,4 @@ See {file:LICENSE.txt} for license information.
 
 [masscan]: https://github.com/robertdavidgraham/masscan#readme
 [ruby]: https://www.ruby-lang.org/
-[rprogram]: https://github.com/postmodern/rprogram#readme
+[command_mapper]: https://github.com/postmodern/command_mapper.rb#readme

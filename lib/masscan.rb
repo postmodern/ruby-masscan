@@ -1,2 +1,2 @@
-require 'masscan/program'
+require 'masscan/command'
 require 'masscan/output_file'
