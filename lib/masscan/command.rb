@@ -2,6 +2,18 @@ require 'command_mapper/command'
 
 module Masscan
   #
+  # ## Example
+  #
+  #     require 'masscan/command'
+  #     
+  #     Masscan::Command.sudo do |masscan|
+  #       masscan.output_format = :list
+  #       masscan.output_file   = 'masscan.txt'
+  #     
+  #       masscan.ips   = '192.168.1.1/24'
+  #       masscan.ports = [20,21,22,23,25,80,110,443,512,522,8080,1080]
+  #     end
+  #
   # ## `masscan` options:
   #
   # * `--range` - `masscan.range`
