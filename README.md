@@ -17,9 +17,11 @@ file formats.
 
 * Provides a [Ruby interface][Masscan::Command] for running the `masscan`
   utility.
-* Supports parsing masscan Binary, List, and JSON output files.
+* Supports [parsing][Masscan::OutputFile] masscan Binary, List, and JSON output
+  files.
 
 [Masscan::Command]: https://rubydoc.info/gems/ruby-masscan/Masscan/Command
+[Masscan::OutputFile]: https://rubydoc.info/gems/ruby-masscan/Masscan/OutputFile
 
 ## Examples
 
