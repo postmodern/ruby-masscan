@@ -37,8 +37,8 @@ module Masscan
     #     masscan.ports = [22, 80, 443]
     #   end
     #
-    def self.scan(options={},**kwargs,&block)
-      run(options,**kwargs,&block)
+    def self.scan(options={},&block)
+      run(options,&block)
     end
 
     #
@@ -46,8 +46,8 @@ module Masscan
     #
     # @see scan
     #
-    def self.sudo_scan(options={},**kwargs,&block)
-      sudo(options,**kwargs,&block)
+    def self.sudo_scan(options={},&block)
+      sudo(options,&block)
     end
 
   end
