@@ -2,6 +2,8 @@ require 'command_mapper/command'
 
 module Masscan
   #
+  # Provides an interface for invoking the `masscan` utility.
+  #
   # ## Example
   #
   #     require 'masscan/command'
