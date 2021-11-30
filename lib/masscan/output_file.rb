@@ -8,6 +8,7 @@ module Masscan
   #
   class OutputFile
 
+    # Mapping of formats to parsers.
     PARSERS = {
       binary: Parsers::Binary,
       list:   Parsers::List,
