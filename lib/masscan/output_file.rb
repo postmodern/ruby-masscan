@@ -30,6 +30,8 @@ module Masscan
     # The parser for the output file format.
     #
     # @return [Parsers::Binary, Parsers::JSON, Parsers::List]
+    #
+    # @api private
     attr_reader :parser
 
     #
