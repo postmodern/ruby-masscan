@@ -52,6 +52,20 @@ module Masscan
       end
     end
 
+    # Mapping of file extensions to formats
+    FILE_FORMATS = {
+      '.bin' => :binary,
+      '.dat' => :binary,
+
+      '.txt' => :list,
+      '.list' => :list,
+
+      '.json'   => :json,
+      '.ndjson' => :ndjson,
+
+      '.xml' => :xml
+    }
+
     #
     # Infers the format from the output file's extension name.
     #
@@ -65,13 +79,7 @@ module Masscan
     #   The output format could not be inferred from the file's name.
     #
     def self.infer_format(path)
-      case File.extname(path)
-      when '.bin', '.dat'     then :binary
-      when '.txt', '.list'    then :list
-      when '.json'            then :json
-      when '.ndjson'          then :ndjson
-      when '.xml'             then :xml
-      else
+      FILE_FORMATS.fetch(File.extname(path)) do
         raise(ArgumentError,"could not infer format of #{path}")
       end
     end
