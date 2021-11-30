@@ -10,7 +10,7 @@ module Masscan
 
     # Mapping of formats to parsers.
     #
-    # @api private
+    # @api semipublic
     PARSERS = {
       binary: Parsers::Binary,
       list:   Parsers::List,
@@ -59,7 +59,7 @@ module Masscan
 
     # Mapping of file extensions to formats
     #
-    # @api private
+    # @api semipublic
     FILE_FORMATS = {
       '.bin' => :binary,
       '.dat' => :binary,
@@ -85,7 +85,7 @@ module Masscan
     # @raise [ArgumentError]
     #   The output format could not be inferred from the file's name.
     #
-    # @api private
+    # @api semipublic
     #
     def self.infer_format(path)
       FILE_FORMATS.fetch(File.extname(path)) do
