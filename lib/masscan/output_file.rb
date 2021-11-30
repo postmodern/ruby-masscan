@@ -6,6 +6,13 @@ module Masscan
   #
   # Represents an output file.
   #
+  # ## Example
+  #
+  #     output_file = Masscan::OutputFile.new('masscan.json')
+  #     output_file.each do |record|
+  #       p record
+  #     end
+  #
   class OutputFile
 
     # Mapping of formats to parsers.
