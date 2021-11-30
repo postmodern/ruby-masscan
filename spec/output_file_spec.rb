@@ -68,6 +68,38 @@ describe Masscan::OutputFile do
     end
   end
 
+  describe "FILE_FORMATS" do
+    subject { described_class::FILE_FORMATS }
+
+    describe ".bin" do
+      it { expect(subject['.bin']).to be(:binary) }
+    end
+
+    describe ".dat" do
+      it { expect(subject['.dat']).to be(:binary) }
+    end
+
+    describe ".txt" do
+      it { expect(subject['.txt']).to be(:list) }
+    end
+
+    describe ".list" do
+      it { expect(subject['.list']).to be(:list) }
+    end
+
+    describe ".json" do
+      it { expect(subject['.json']).to be(:json) }
+    end
+
+    describe ".ndjson" do
+      it { expect(subject['.ndjson']).to be(:ndjson) }
+    end
+
+    describe ".xml" do
+      it { expect(subject['.xml']).to be(:xml) }
+    end
+  end
+
   describe "#initialize" do
     let(:path) { "/path/to/file.json" }
 
