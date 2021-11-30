@@ -82,6 +82,8 @@ module Masscan
   #
   # @see https://github.com/robertdavidgraham/masscan/blob/master/doc/masscan.8.markdown
   #
+  # @since 0.2.0
+  #
   class Command < CommandMapper::Command
 
     class PortList < CommandMapper::Types::Num
