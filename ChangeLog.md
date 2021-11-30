@@ -1,3 +1,11 @@
+### 0.2.0 / 2021-11-30
+
+* Replaced the `rprogram` dependency with [command_mapper].
+* Fixed a typo in the mapping of the `-oJ` option flag.
+* Added {Masscan::OutputFile#to_s}.
+
+[command_mapper]: https://github.com/postmodern/command_mapper.rb#readme
+
 ### 0.1.1 / 2021-09-09
 
 * Added missing {Masscan::Banner#ttl}.
