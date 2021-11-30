@@ -124,13 +124,13 @@ $ gem install ruby-masscan
 ### gemspec
 
 ```ruby
-gemspec.add_dependency 'ruby-masscan', '~> 0.1'
+gemspec.add_dependency 'ruby-masscan', '~> 0.2'
 ```
 
 ### Gemfile
 
 ```ruby
-gem 'ruby-masscan', '~> 0.1'
+gem 'ruby-masscan', '~> 0.2'
 ```
 
 ## License
