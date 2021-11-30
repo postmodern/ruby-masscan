@@ -12,9 +12,6 @@ module Masscan
     # @param [Hash{Symbol => Object}] options
     #   Additional options for masscan.
     #
-    # @param [Hash{Symbol => Object}] kwargs
-    #   Additional keyword arguments for masscan.
-    #
     # @yield [masscan]
     #   If a block is given, it will be passed the new masscan instance
     #   used to specify options for masscan.
