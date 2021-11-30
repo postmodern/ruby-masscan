@@ -107,5 +107,17 @@ module Masscan
       end
     end
 
+    #
+    # Converts the output file to a String.
+    #
+    # @return [String]
+    #   The path to the output file.
+    #
+    # @since 0.2.0
+    #
+    def to_s
+      @path
+    end
+
   end
 end

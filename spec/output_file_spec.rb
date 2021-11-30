@@ -132,7 +132,9 @@ describe Masscan::OutputFile do
     end
   end
 
-  subject { described_class.new(Fixtures.join('masscan.list')) }
+  let(:path) { Fixtures.join('masscan.list') }
+
+  subject { described_class.new(path) }
 
   describe "#each" do
     context "when given a block" do
@@ -162,6 +164,12 @@ describe Masscan::OutputFile do
       it "must return an Enumerator" do
         expect(subject.each.to_a).to eq(expected_records)
       end
+    end
+  end
+
+  describe "#to_s" do
+    it "must return #path" do
+      expect(subject.to_s).to eq(path)
     end
   end
 end
