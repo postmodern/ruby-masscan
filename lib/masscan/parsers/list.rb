@@ -64,7 +64,7 @@ module Masscan
               timestamp: parse_timestamp(timestamp)
             )
           elsif line.start_with?('banner ')
-            type, ip_proto, port, ip, timestamp, app_proto, banner = line.split(' ',7)
+            type, ip_proto, port, ip, timestamp, app_proto, payload = line.split(' ',7)
 
             yield Banner.new(
               protocol:     parse_ip_protocol(ip_proto),
@@ -72,9 +72,26 @@ module Masscan
               ip:           parse_ip(ip),
               timestamp:    parse_timestamp(timestamp),
               app_protocol: parse_app_protocol(app_proto),
-              payload:      banner
+              payload:      parse_payload(payload)
             )
           end
+        end
+      end
+
+      #
+      # Parses a payload string and removes any `\\xXX` hex escaped characters.
+      #
+      # @param [String] payload
+      #   The payload string to unescape.
+      #
+      # @return [String]
+      #   The raw payload string.
+      #
+      # @api private
+      #
+      def self.parse_payload(payload)
+        payload.gsub(/\\x[0-9a-f]{2}/) do |hex_escape|
+          hex_escape[2..].to_i(16).chr
         end
       end
     end

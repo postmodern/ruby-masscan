@@ -104,6 +104,31 @@ describe Masscan::Parsers::List do
         expect(yielded_banner.service).to eq(service_keyword)
         expect(yielded_banner.payload).to  eq(payload)
       end
+
+      context "when the payload field contains '\\xXX' hex escaped characters" do
+        let(:escaped_payload) do
+          "HTTP/1.0 404 Not Found\\x0d\\x0aContent-Type: text/html\\x0d\\x0aDate: Thu, 26 Aug 2021 06:47:52 GMT\\x0d\\x0aServer: ECS (sec/974D)\\x0d\\x0aContent-Length: 345\\x0d\\x0aConnection: close\\x0d\\x0a\\x0d"
+        end
+        let(:unescaped_payload) do
+          "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nDate: Thu, 26 Aug 2021 06:47:52 GMT\r\nServer: ECS (sec/974D)\r\nContent-Length: 345\r\nConnection: close\r\n\r"
+        end
+
+        let(:line) do
+          "banner #{protocol} #{port} #{ip} #{timestamp.to_i} #{service_name} #{escaped_payload}"
+        end
+
+        it "must unescape the '\\xXX' hex escaped characters" do
+          yielded_records = []
+
+          subject.parse(io) do |record|
+            yielded_records << record
+          end
+
+          yielded_banner = yielded_records.first
+
+          expect(yielded_banner.payload).to eq(unescaped_payload)
+        end
+      end
     end
   end
 end
