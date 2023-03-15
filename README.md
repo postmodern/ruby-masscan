@@ -135,7 +135,7 @@ gem 'ruby-masscan', '~> 0.2'
 
 ## License
 
-Copyright (c) 2021 Hal Brodigan
+Copyright (c) 2021-2023 Hal Brodigan
 
 See {file:LICENSE.txt} for license information.
 
