@@ -17,6 +17,8 @@ module Masscan
   #
   class OutputFile
 
+    include Enumerable
+
     # Mapping of formats to parsers.
     #
     # @api semipublic

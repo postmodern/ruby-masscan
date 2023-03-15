@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'masscan/output_file'
 
 describe Masscan::OutputFile do
+  it { expect(described_class).to include(Enumerable) }
+
   describe ".infer_format" do
     subject { described_class.infer_format(path) }
 
