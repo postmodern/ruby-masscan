@@ -1,3 +1,8 @@
+### 0.2.1 / 2023-03-15
+
+* Unescape `\\xXX` hex escaped characters in payload strings parsed from `.list`
+  masscan files.
+
 ### 0.2.0 / 2021-11-30
 
 * Replaced the `rprogram` dependency with [command_mapper].
