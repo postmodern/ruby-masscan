@@ -88,8 +88,23 @@ module Masscan
   #
   class Command < CommandMapper::Command
 
+    #
+    # Represents the type for the `-p,--ports` option.
+    #
+    # @api private
+    #
     class PortList < CommandMapper::Types::Num
 
+      #
+      # Validates a given value.
+      #
+      # @param [Array, Range, String, Object] value
+      #   The port list value.
+      #
+      # @return [true, (false, String)]
+      #   Returns true if the value is valid, or `false` and a validation error
+      #   message if the value is not compatible.
+      #
       def validate(value)
         case value
         when Array
@@ -127,6 +142,15 @@ module Masscan
         end
       end
 
+      #
+      # Formats a port list value into a String.
+      #
+      # @param [Array<String, Integer, Range>, Range<Integer,Integer>, String, #to_s] value
+      #   The port list value to format.
+      #
+      # @return [String]
+      #   The formatted port list string.
+      #
       def format(value)
         case value
         when Array
@@ -142,8 +166,23 @@ module Masscan
 
     end
 
+    #
+    # Represents the type for the `--shards` option.
+    #
+    # @api private
+    #
     class Shards < CommandMapper::Types::Str
 
+      #
+      # Validates a shards value.
+      #
+      # @param [Array, Object] value
+      #   The shards value to validate.
+      #
+      # @return [true, (false, String)]
+      #   Returns true if the value is valid, or `false` and a validation error
+      #   message if the value is not compatible.
+      #
       def validate(value)
         case value
         when Array
@@ -157,6 +196,15 @@ module Masscan
         end
       end
 
+      #
+      # Formats a shards value into a String.
+      #
+      # @param [(#to_s, #to_s), #to_s] value
+      #   The shards value to format.
+      #
+      # @return [String]
+      #   The formatted shards value.
+      #
       def format(value)
         case value
         when Array
