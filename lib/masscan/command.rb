@@ -116,6 +116,12 @@ module Masscan
           end
 
           return true
+        when String
+          if value =~ /\A(?:(?:[TU]:)?\d+(?:-\d+)?)(?:,(?:(?:[TU]:)?\d+(?:-\d+)?))*\z/
+            return true
+          else
+            return [false, "not a valid port list (#{value.inspect})"]
+          end
         else
           super(value)
         end
@@ -127,6 +133,8 @@ module Masscan
           value.map(&method(:format)).join(',')
         when Range
           "#{value.begin}-#{value.end}"
+        when String
+          value
         else
           super(value)
         end
