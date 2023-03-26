@@ -95,6 +95,9 @@ module Masscan
     #
     class PortList < CommandMapper::Types::Num
 
+      # Regular expression that validates port list String values.
+      REGEXP = /\A(?:(?:[TU]:)?\d+(?:-\d+)?)(?:,(?:(?:[TU]:)?\d+(?:-\d+)?))*\z/
+
       #
       # Validates a given value.
       #
@@ -132,7 +135,7 @@ module Masscan
 
           return true
         when String
-          if value =~ /\A(?:(?:[TU]:)?\d+(?:-\d+)?)(?:,(?:(?:[TU]:)?\d+(?:-\d+)?))*\z/
+          if value =~ REGEXP
             return true
           else
             return [false, "not a valid port list (#{value.inspect})"]
