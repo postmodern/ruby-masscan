@@ -299,4 +299,66 @@ describe Masscan::Command do
       end
     end
   end
+
+  describe described_class::RotateTime do
+    describe "#validate" do
+      context "when given an Integer" do
+        let(:value) { 42 }
+
+        it "must return true" do
+          expect(subject.validate(value)).to be(true)
+        end
+      end
+
+      context "when given a String" do
+        context "but the String is a number" do
+          let(:value) { '42' }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "but the String is 'hourly'" do
+          let(:value) { 'hourly' }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "but the String is '<N>hours'" do
+          let(:value) { '2hours' }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "but the String is '<N>min'" do
+          let(:value) { '10min' }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "but the String is not a number" do
+          let(:value) { "abc" }
+
+          it "must return a validation error" do
+            expect(subject.validate(value)).to eq([false, "invalid rotation time (#{value.inspect})"])
+          end
+        end
+
+        context "but the String contains a new-line" do
+          let(:value) { "10\nfoo" }
+
+          it "must return a validation error" do
+            expect(subject.validate(value)).to eq([false, "invalid rotation time (#{value.inspect})"])
+          end
+        end
+      end
+    end
+  end
 end

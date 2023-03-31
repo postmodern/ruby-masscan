@@ -219,6 +219,45 @@ module Masscan
 
     end
 
+    #
+    # Represents the type for the `--rotate` option.
+    #
+    # @api private
+    #
+    # @since 0.3.0
+    #
+    class RotateTime < CommandMapper::Types::Str
+
+      # Regular expression to validate the `--rotate` time value.
+      REGEXP = /\A(?:\d+|hourly|\d+hours|\d+min)\z/
+
+      #
+      # Validates a `--rotate` time value.
+      #
+      # @param [Integer, String, #to_s] value
+      #   The time value to validate.
+      #
+      # @return [true, (false, String)]
+      #   Returns true if the value is valid, or `false` and a validation error
+      #   message if the value is not compatible.
+      #
+      def validate(value)
+        case value
+        when Integer
+          return true
+        else
+          string = value.to_s
+
+          if string =~ REGEXP
+            return true
+          else
+            return [false, "invalid rotation time (#{string.inspect})"]
+          end
+        end
+      end
+
+    end
+
     command "masscan" do
       option '--range', name: :range, value: true, repeats: true
       option '-p', name: :ports, value: {type: PortList.new}
@@ -264,7 +303,7 @@ module Masscan
       option '--resume-index', name: :resume_index
       option '--resume-count', name: :resume_count
       option '--shards', name: :shards, value: {type: Shards.new}
-      option '--rotate', name: :rotate, value: true
+      option '--rotate', name: :rotate, value: {type: RotateTime.new}
       option '--rotate-offset', name: :rotate_offset, value: true
       option '--rotate-size',   name: :rotate_size, value: true
       option '--rotate-dir',    name: :rotate_dir, value: {type: InputDir.new}
