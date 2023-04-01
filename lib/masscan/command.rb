@@ -89,14 +89,151 @@ module Masscan
   class Command < CommandMapper::Command
 
     #
+    # Represents a port number.
+    #
+    # @api private
+    #
+    # @since 0.3.0
+    #
+    class Port < CommandMapper::Types::Num
+
+      # Regular expression that validates a port number.
+      PORT_REGEXP = /[1-9][0-9]{0,3}|[1-5][0-9][0-9][0-9][0-9]|6[0-4][0-9][0-9][0-9]|65[0-4][0-9][0-9]|655[0-2][0-9]|6553[0-5]/
+
+      # Regular expression that validates either a port number or service name.
+      REGEXP = /\A#{PORT_REGEXP}\z/
+
+      #
+      # Initializes the port type.
+      #
+      def initialize
+        super(range: 1..65535)
+      end
+
+      #
+      # Validates the given value.
+      #
+      # @param [Object] value
+      #   The value to validate.
+      #
+      # @return [true, (false, String)]
+      #   Returns true if the value is valid, or `false` and a validation error
+      #   message if the value is not compatible.
+      #
+      def validate(value)
+        case value
+        when String
+          if value =~ REGEXP
+            return true
+          else
+            return [false, "must be a valid port number (#{value.inspect})"]
+          end
+        else
+          super(value)
+        end
+      end
+
+      #
+      # Formats the given port number.
+      #
+      # @param [Integer, String] value
+      #   The given port number.
+      #
+      # @return [String]
+      #   The formatted port number.
+      #
+      def format(value)
+        case value
+        when String
+          value
+        else
+          super(value)
+        end
+      end
+
+    end
+
+    #
+    # Represents a port range.
+    #
+    # @api private
+    #
+    # @since 0.3.0
+    #
+    class PortRange < Port
+
+      # Regular expression to validate either a port or a port range.
+      PORT_RANGE_REGEXP = /#{PORT_REGEXP}-#{PORT_REGEXP}|#{PORT_REGEXP}/
+
+      # Regular expression to validate either a port or a port range.
+      REGEXP = /\A#{PORT_RANGE_REGEXP}\z/
+
+      #
+      # Validates the given port or port range value.
+      #
+      # @param [Object] value
+      #   The port or port range value to validate.
+      #
+      # @return [true, (false, String)]
+      #   Returns true if the value is valid, or `false` and a validation error
+      #   message if the value is not compatible.
+      #
+      def validate(value)
+        case value
+        when Range
+          valid, message = super(value.begin)
+
+          unless valid
+            return [valid, message]
+          end
+
+          valid, message = super(value.end)
+
+          unless valid
+            return [valid, message]
+          end
+
+          return true
+        when String
+          if value =~ REGEXP
+            return true
+          else
+            return [false, "must be a valid port range or port number (#{value.inspect})"]
+          end
+        else
+          super(value)
+        end
+      end
+
+      #
+      # Formats the given port or port range value.
+      #
+      # @param [Range, Integer, String] value
+      #   The port or port range value to format.
+      #
+      # @return [String]
+      #   The formatted port or port range.
+      #
+      def format(value)
+        case value
+        when Range
+          "#{value.begin}-#{value.end}"
+        else
+          super(value)
+        end
+      end
+
+    end
+
+    #
     # Represents the type for the `-p,--ports` option.
     #
     # @api private
     #
-    class PortList < CommandMapper::Types::Num
+    class PortList < PortRange
 
       # Regular expression that validates port list String values.
-      REGEXP = /\A(?:(?:[TU]:)?\d+(?:-\d+)?)(?:,(?:(?:[TU]:)?\d+(?:-\d+)?))*\z/
+      REGEXP = /\A(?:(?:U:)?#{PORT_RANGE_REGEXP})(?:,(?:U:)?#{PORT_RANGE_REGEXP})*\z/
 
       #
       # Validates a given value.
@@ -268,7 +405,7 @@ module Masscan
       option '--echo',    name: :echo, value: true
       option '--adapter', name: :adapter, value: true
       option '--adapter-ip',   name: :adapter_ip, value: true
-      option '--adapter-port', name: :adapter_port, value: {type: Num.new}
+      option '--adapter-port', name: :adapter_port, value: {type: PortRange.new}
       option '--adapter-mac',  name: :adapter_mac, value: true
       option '--adapter-vlan', name: :adapter_vlan, value: true
       option '--router-mac', name: :router_mac, value: true

@@ -2,6 +2,164 @@ require 'spec_helper'
 require 'masscan/command'
 
 describe Masscan::Command do
+  describe described_class::Port do
+    describe "#validate" do
+      context "when given an Integer" do
+        let(:value) { 443 }
+
+        it "must return true" do
+          expect(subject.validate(value)).to be(true)
+        end
+
+        context "but it's less than 1" do
+          let(:value) { 0 }
+
+          it "must return [false, \"(...) not within the range of acceptable values (1..65535)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "(#{value.inspect}) not within the range of acceptable values (1..65535)"]
+            )
+          end
+        end
+
+        context "but it's greater than 65535" do
+          let(:value) { 65536 }
+
+          it "must return [false, \"(...) not within the range of acceptable values (1..65535)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "(#{value.inspect}) not within the range of acceptable values (1..65535)"]
+            )
+          end
+        end
+      end
+
+      context "when given a String" do
+        context "and it's a number" do
+          let(:value) { '443' }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+
+          context "but it's less than 1" do
+            let(:value) { '0' }
+
+            it "must return [false, \"must be a valid port number (...)\"]" do
+              expect(subject.validate(value)).to eq(
+                [false, "must be a valid port number (#{value.inspect})"]
+              )
+            end
+          end
+
+          context "but it's greater than 65535" do
+            let(:value) { '65536' }
+
+            it "must return [false, \"must be a valid port number (...)\"]" do
+              expect(subject.validate(value)).to eq(
+                [false, "must be a valid port number (#{value.inspect})"]
+              )
+            end
+          end
+        end
+
+        context "but it contains numbers" do
+          let(:value) { "foo" }
+
+          it "must return [false, \"must be a valid port number (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "must be a valid port number (#{value.inspect})"]
+            )
+          end
+        end
+      end
+    end
+  end
+
+  describe described_class::PortRange do
+    describe "#validate" do
+      context "when given an Integer value" do
+        let(:value) { 443 }
+
+        it "must return true" do
+          expect(subject.validate(value)).to be(true)
+        end
+
+        context "but it's less than 1" do
+          let(:value) { 0 }
+
+          it "must return [false, \"(...) not within the range of acceptable values (1..65535)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "(#{value.inspect}) not within the range of acceptable values (1..65535)"]
+            )
+          end
+        end
+
+        context "but it's greater than 65535" do
+          let(:value) { 65536 }
+
+          it "must return [false, \"(...) not within the range of acceptable values (1..65535)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "(#{value.inspect}) not within the range of acceptable values (1..65535)"]
+            )
+          end
+        end
+      end
+
+      context "when given a String value" do
+        let(:value) { '443' }
+
+        it "must return true" do
+          expect(subject.validate(value)).to be(true)
+        end
+
+        context "but it's less than 1" do
+          let(:value) { '0' }
+
+          it "must return [false, \"must be a valid port range or port number (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "must be a valid port range or port number (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it's greater than 65535" do
+          let(:value) { '65536' }
+
+          it "must return [false, \"must be a valid port range or port number (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "must be a valid port range or port number (#{value.inspect})"]
+            )
+          end
+        end
+      end
+
+      context "when given a Range of port numbers" do
+        let(:value) { (1..1024) }
+
+        it "must return true" do
+          expect(subject.validate(value)).to be(true)
+        end
+      end
+    end
+
+    describe "#format" do
+      context "when given a single port number" do
+        let(:value) { 443 }
+
+        it "must return the formatted port number" do
+          expect(subject.format(value)).to eq(value.to_s)
+        end
+      end
+
+      context "when given a Range of port numbers" do
+        let(:value) { 1..1024 }
+
+        it "must return the formatted port number range (ex: 1-102)" do
+          expect(subject.format(value)).to eq("#{value.begin}-#{value.end}")
+        end
+      end
+    end
+  end
+
   describe described_class::PortList do
     describe "#validate" do
       context "when given a single port number" do
@@ -44,14 +202,6 @@ describe Masscan::Command do
             expect(subject.validate(value)).to be(true)
           end
 
-          context "and it's prefixed by 'T:'" do
-            let(:value) { "T:#{super()}" }
-
-            it "must return true" do
-              expect(subject.validate(value)).to be(true)
-            end
-          end
-
           context "and it's prefixed by 'U:'" do
             let(:value) { "U:#{super()}" }
 
@@ -66,14 +216,6 @@ describe Masscan::Command do
 
           it "must return true" do
             expect(subject.validate(value)).to be(true)
-          end
-
-          context "and it's prefixed by 'T:'" do
-            let(:value) { "T:#{super()}" }
-
-            it "must return true" do
-              expect(subject.validate(value)).to be(true)
-            end
           end
 
           context "and it's prefixed by 'U:'" do
@@ -92,14 +234,6 @@ describe Masscan::Command do
             expect(subject.validate(value)).to be(true)
           end
 
-          context "and it's prefixed by 'T:'" do
-            let(:value) { "T:#{super()}" }
-
-            it "must return true" do
-              expect(subject.validate(value)).to be(true)
-            end
-          end
-
           context "and it's prefixed by 'U:'" do
             let(:value) { "U:#{super()}" }
 
@@ -116,14 +250,6 @@ describe Masscan::Command do
             expect(subject.validate(value)).to be(true)
           end
 
-          context "and it's prefixed by 'T:'" do
-            let(:value) { "T:#{super()}" }
-
-            it "must return true" do
-              expect(subject.validate(value)).to be(true)
-            end
-          end
-
           context "and it's prefixed by 'U:'" do
             let(:value) { "U:#{super()}" }
 
@@ -138,14 +264,6 @@ describe Masscan::Command do
 
           it "must return true" do
             expect(subject.validate(value)).to be(true)
-          end
-
-          context "and it's prefixed by 'T:'" do
-            let(:value) { "T:#{super()}" }
-
-            it "must return true" do
-              expect(subject.validate(value)).to be(true)
-            end
           end
 
           context "and it's prefixed by 'U:'" do
