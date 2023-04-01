@@ -395,6 +395,40 @@ module Masscan
 
     end
 
+    #
+    # Represents the type for the `--adapter-mac` and `--router-mac` options.
+    #
+    # @api private
+    #
+    # @since 0.3.0
+    #
+    class MACAddress < CommandMapper::Types::Str
+
+      # Regular expression to validate a MAC address.
+      REGEXP = /\A[A-Fa-f0-9]{2}(?::[A-Fa-f0-9]{2}){5}\z/
+
+      #
+      # Validates a MAC address value.
+      #
+      # @param [String, #to_s] value
+      #   The MAC address value to validate.
+      #
+      # @return [true, (false, String)]
+      #   Returns true if the value is valid, or `false` and a validation error
+      #   message if the value is not compatible.
+      #
+      def validate(value)
+        string = value.to_s
+
+        if string =~ REGEXP
+          return true
+        else
+          return [false, "invalid MAC address (#{string.inspect})"]
+        end
+      end
+
+    end
+
     command "masscan" do
       option '--range', name: :range, value: true, repeats: true
       option '-p', name: :ports, value: {type: PortList.new}
@@ -406,9 +440,9 @@ module Masscan
       option '--adapter', name: :adapter, value: true
       option '--adapter-ip',   name: :adapter_ip, value: true
       option '--adapter-port', name: :adapter_port, value: {type: PortRange.new}
-      option '--adapter-mac',  name: :adapter_mac, value: true
+      option '--adapter-mac',  name: :adapter_mac, value: {type: MACAddress.new}
       option '--adapter-vlan', name: :adapter_vlan, value: true
-      option '--router-mac', name: :router_mac, value: true
+      option '--router-mac', name: :router_mac, value: {type: MACAddress.new}
       option '--ping', name: :ping
       option '--exclude', name: :exclude, value: true, repeats: true
       option '--excludefile', name: :exclude_file, value: {type: InputFile.new}, repeats: true

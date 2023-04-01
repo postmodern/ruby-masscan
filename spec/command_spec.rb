@@ -479,4 +479,98 @@ describe Masscan::Command do
       end
     end
   end
+
+  describe described_class::MACAddress do
+    describe "#validate" do
+      context "when given a String" do
+        context "and it's a valid MAC address" do
+          let(:value) { "00:11:22:33:44:55" }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "but an octent contains less than two hex digits" do
+          let(:value) { "0:11:22:33:44" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but an octent contains more than two hex digits" do
+          let(:value) { "000:11:22:33:44" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it's contains less than six octets" do
+          let(:value) { "00:11:22:33:44" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it's contains more than six octets" do
+          let(:value) { "00:11:22:33:44:55:66" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it contains non-hex characters" do
+          let(:value) { "000:11:22:33:44:xx" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it is not separated by ':' characters" do
+          let(:value) { "00.11.22.33.44.55" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it contains spaces" do
+          let(:value) { "00:11:22: 33:44:55" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it contains new-line characters" do
+          let(:value) { "00:11:22:\n33:44:55" }
+
+          it "must return [false, \"invalid MAC address (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid MAC address (#{value.inspect})"]
+            )
+          end
+        end
+      end
+    end
+  end
 end
