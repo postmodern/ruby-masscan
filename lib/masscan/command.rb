@@ -383,6 +383,12 @@ module Masscan
         when Integer
           return true
         else
+          valid, message = super(value)
+
+          unless valid
+            return [valid, message]
+          end
+
           string = value.to_s
 
           if string =~ REGEXP
@@ -418,6 +424,12 @@ module Masscan
       #   message if the value is not compatible.
       #
       def validate(value)
+        valid, message = super(value)
+
+        unless valid
+          return [valid, message]
+        end
+
         string = value.to_s
 
         if string =~ REGEXP
