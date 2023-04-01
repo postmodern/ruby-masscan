@@ -230,10 +230,20 @@ module Masscan
     #
     # @api private
     #
-    class PortList < PortRange
+    class PortList < CommandMapper::Types::List
+
+      # Regular expression for validating a port or port range.
+      PORT_RANGE_REGEXP = PortRange::PORT_RANGE_REGEXP
 
       # Regular expression that validates port list String values.
       REGEXP = /\A(?:(?:U:)?#{PORT_RANGE_REGEXP})(?:,(?:U:)?#{PORT_RANGE_REGEXP})*\z/
+
+      #
+      # Initializes the port list type.
+      #
+      def initialize
+        super(type: PortRange.new)
+      end
 
       #
       # Validates a given value.
@@ -247,30 +257,8 @@ module Masscan
       #
       def validate(value)
         case value
-        when Array
-          value.each do |element|
-            valid, message = validate(element)
-
-            unless valid
-              return [valid, message]
-            end
-          end
-
-          return true
         when Range
-          valid, message = super(value.begin)
-
-          unless valid
-            return [valid, message]
-          end
-
-          valid, message = super(value.end)
-
-          unless valid
-            return [valid, message]
-          end
-
-          return true
+          @type.validate(value)
         when String
           if value =~ REGEXP
             return true
@@ -293,11 +281,11 @@ module Masscan
       #
       def format(value)
         case value
-        when Array
-          value.map(&method(:format)).join(',')
         when Range
-          "#{value.begin}-#{value.end}"
+          # format an individual port range
+          @type.format(value)
         when String
+          # pass strings directly through
           value
         else
           super(value)
