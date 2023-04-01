@@ -303,10 +303,13 @@ module Masscan
     #
     class Shards < CommandMapper::Types::Str
 
+      # Regular expression for validating `--shards` values.
+      REGEXP = %r{\A\d+/\d+\z}
+
       #
       # Validates a shards value.
       #
-      # @param [Array, Object] value
+      # @param [Array, Rational, String, #to_s] value
       #   The shards value to validate.
       #
       # @return [true, (false, String)]
@@ -316,20 +319,38 @@ module Masscan
       def validate(value)
         case value
         when Array
-          if value.length > 2
-            return [false, "cannot contain more tha two elements (#{value.inspect})"]
+          unless value.length == 2
+            return [false, "must contain two elements (#{value.inspect})"]
+          end
+
+          unless (value[0].kind_of?(Integer) && value[1].kind_of?(Integer))
+            return [false, "shard values must be Integers (#{value.inspect})"]
           end
 
           return true
+        when Rational
+          return true
         else
-          super(value)
+          valid, message = super(value)
+
+          unless valid
+            return [valid, message]
+          end
+
+          string = value.to_s
+
+          unless string =~ REGEXP
+            return [false, "invalid shards value (#{value.inspect})"]
+          end
+
+          return true
         end
       end
 
       #
       # Formats a shards value into a String.
       #
-      # @param [(#to_s, #to_s), #to_s] value
+      # @param [(Integer, Integer), Rational, #to_s] value
       #   The shards value to format.
       #
       # @return [String]

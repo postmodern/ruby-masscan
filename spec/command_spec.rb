@@ -367,12 +367,42 @@ describe Masscan::Command do
           expect(subject.validate(value)).to be(true)
         end
 
+        context "but the Array length is 1" do
+          let(:value) { [1] }
+
+          it "must return a validation error" do
+            expect(subject.validate(value)).to eq(
+              [false, "must contain two elements (#{value.inspect})"]
+            )
+          end
+        end
+
         context "but the Array length is > 2" do
           let(:value) { [1,2,3] }
 
           it "must return a validation error" do
             expect(subject.validate(value)).to eq(
-              [false, "cannot contain more tha two elements (#{value.inspect})"]
+              [false, "must contain two elements (#{value.inspect})"]
+            )
+          end
+        end
+      end
+
+      context "when given a String" do
+        context "and it matches X/Y" do
+          let(:value) { "1/2" }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "but it does not match X/Y" do
+          let(:value) { "1" }
+
+          it "must return a validation error" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid shards value (#{value.inspect})"]
             )
           end
         end
