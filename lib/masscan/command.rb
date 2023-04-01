@@ -2,6 +2,8 @@
 
 require 'command_mapper/command'
 
+require 'ipaddr'
+
 module Masscan
   #
   # Provides an interface for invoking the `masscan` utility.
@@ -429,8 +431,81 @@ module Masscan
 
     end
 
+    #
+    # Represents the type for the `--range` option and `ips` argument(s).
+    #
+    # @api private
+    #
+    # @since 0.3.0
+    #
+    class Target < CommandMapper::Types::Str
+
+      # Regular expression for validating decimal octets (0-255).
+      DECIMAL_OCTET_REGEXP = /(?<=[^\d]|^)(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])(?=[^\d]|$)/
+
+      # Regular expression for validating IPv4 addresses or CIDR ranges.
+      IPV4_REGEXP = /#{DECIMAL_OCTET_REGEXP}(?:\.#{DECIMAL_OCTET_REGEXP}){3}(?:\/\d{1,2})?/
+
+      # Regular expression for validating IPv6 addresses or CIDR ranges.
+      IPV6_REGEXP = /
+       (?:[0-9a-f]{1,4}:){6}#{IPV4_REGEXP}|
+       (?:[0-9a-f]{1,4}:){5}[0-9a-f]{1,4}:#{IPV4_REGEXP}|
+       (?:[0-9a-f]{1,4}:){5}:[0-9a-f]{1,4}:#{IPV4_REGEXP}|
+       (?:[0-9a-f]{1,4}:){1,1}(?::[0-9a-f]{1,4}){1,4}:#{IPV4_REGEXP}|
+       (?:[0-9a-f]{1,4}:){1,2}(?::[0-9a-f]{1,4}){1,3}:#{IPV4_REGEXP}|
+       (?:[0-9a-f]{1,4}:){1,3}(?::[0-9a-f]{1,4}){1,2}:#{IPV4_REGEXP}|
+       (?:[0-9a-f]{1,4}:){1,4}(?::[0-9a-f]{1,4}){1,1}:#{IPV4_REGEXP}|
+       :(?::[0-9a-f]{1,4}){1,5}:#{IPV4_REGEXP}|
+       (?:(?:[0-9a-f]{1,4}:){1,5}|:):#{IPV4_REGEXP}|
+       (?:[0-9a-f]{1,4}:){1,1}(?::[0-9a-f]{1,4}){1,6}(?:\/\d{1,3})?|
+       (?:[0-9a-f]{1,4}:){1,2}(?::[0-9a-f]{1,4}){1,5}(?:\/\d{1,3})?|
+       (?:[0-9a-f]{1,4}:){1,3}(?::[0-9a-f]{1,4}){1,4}(?:\/\d{1,3})?|
+       (?:[0-9a-f]{1,4}:){1,4}(?::[0-9a-f]{1,4}){1,3}(?:\/\d{1,3})?|
+       (?:[0-9a-f]{1,4}:){1,5}(?::[0-9a-f]{1,4}){1,2}(?:\/\d{1,3})?|
+       (?:[0-9a-f]{1,4}:){1,6}(?::[0-9a-f]{1,4}){1,1}(?:\/\d{1,3})?|
+       [0-9a-f]{1,4}(?::[0-9a-f]{1,4}){7}(?:\/\d{1,3})?|
+       :(?::[0-9a-f]{1,4}){1,7}(?:\/\d{1,3})?|
+       (?:(?:[0-9a-f]{1,4}:){1,7}|:):(?:\/\d{1,3})?
+      /x
+
+      # Regular expression for validating masscan target IPs or IP ranges.
+      REGEXP = /\A(?:#{IPV4_REGEXP}|#{IPV6_REGEXP})\z/
+
+      #
+      # Validates a IP or IP range target value.
+      #
+      # @param [IPAddr, String, #to_s] value
+      #   The IP or IP range value to validate.
+      #
+      # @return [true, (false, String)]
+      #   Returns true if the value is valid, or `false` and a validation error
+      #   message if the value is not compatible.
+      #
+      def validate(value)
+        case value
+        when IPAddr
+          return true
+        else
+          valid, message = super(value)
+
+          unless valid
+            return [valid, message]
+          end
+
+          string = value.to_s
+
+          unless string =~ REGEXP
+            return [false, "invalid IP or IP range (#{value.inspect})"]
+          end
+
+          return true
+        end
+      end
+
+    end
+
     command "masscan" do
-      option '--range', name: :range, value: true, repeats: true
+      option '--range', name: :range, value: {type: Target.new}, repeats: true
       option '-p', name: :ports, value: {type: PortList.new}
       option '--banners', name: :banners
       option '--rate',    name: :rate, value: {type: Num.new}
@@ -504,7 +579,7 @@ module Masscan
       option '-V', name: :version
       option '-h', name: :help
 
-      argument :ips, repeats: true
+      argument :ips, repeats: true, type: Target.new
     end
 
   end

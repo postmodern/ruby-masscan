@@ -573,4 +573,100 @@ describe Masscan::Command do
       end
     end
   end
+
+  describe described_class::Target do
+    describe "#validate" do
+      context "when given an IPAddr object" do
+        let(:value) { IPAddr.new('127.0.0.1') }
+
+        it "must return true" do
+          expect(subject.validate(value)).to be(true)
+        end
+      end
+
+      context "when given a String" do
+        context "and it's an IPv4 address" do
+          let(:value) { '127.0.0.1' }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "and it's an IPv4 range" do
+          let(:value) { '127.0.0.1/24' }
+
+          it "must return true" do
+            expect(subject.validate(value)).to be(true)
+          end
+        end
+
+        context "and it's an IPv6 address" do
+          context "but it's in compressed notation" do
+            let(:value) { '::1' }
+
+            it "must return true" do
+              expect(subject.validate(value)).to be(true)
+            end
+          end
+
+          context "and it's in full notation" do
+            let(:value) { '2606:2800:220:1:248:1893:25c8:1946' }
+
+            it "must return true" do
+              expect(subject.validate(value)).to be(true)
+            end
+          end
+        end
+
+        context "and it's an IPv6 range" do
+          context "but it's in compressed notation" do
+            let(:value) { '::1/32' }
+
+            it "must return true" do
+              expect(subject.validate(value)).to be(true)
+            end
+          end
+
+          context "and it's in full notation" do
+            let(:value) { '2606:2800:220:1:248:1893:25c8:1946/32' }
+
+            it "must return true" do
+              expect(subject.validate(value)).to be(true)
+            end
+          end
+        end
+
+        context "but it contains non-hex characters" do
+          let(:value) { '2606:2800:220:1:248:1893:25c8:xxxx/32' }
+
+          it "must return [false, \"invalid IP or IP range (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid IP or IP range (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it contains spaces" do
+          let(:value) { '2606:2800:220:1: 248:1893:25c8:1946/32' }
+
+          it "must return [false, \"invalid IP or IP range (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid IP or IP range (#{value.inspect})"]
+            )
+          end
+        end
+
+        context "but it contains new-line characters" do
+          let(:value) { "2606:2800:220:1:\n248:1893:25c8:1946/32" }
+
+          it "must return [false, \"invalid IP or IP range (...)\"]" do
+            expect(subject.validate(value)).to eq(
+              [false, "invalid IP or IP range (#{value.inspect})"]
+            )
+          end
+        end
+      end
+    end
+  end
 end
