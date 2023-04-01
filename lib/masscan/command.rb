@@ -394,7 +394,7 @@ module Masscan
           if string =~ REGEXP
             return true
           else
-            return [false, "invalid rotation time (#{string.inspect})"]
+            return [false, "invalid rotation time (#{value.inspect})"]
           end
         end
       end
@@ -435,7 +435,7 @@ module Masscan
         if string =~ REGEXP
           return true
         else
-          return [false, "invalid MAC address (#{string.inspect})"]
+          return [false, "invalid MAC address (#{value.inspect})"]
         end
       end
 
