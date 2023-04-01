@@ -123,11 +123,11 @@ module Masscan
       def validate(value)
         case value
         when String
-          if value =~ REGEXP
-            return true
-          else
+          unless value =~ REGEXP
             return [false, "must be a valid port number (#{value.inspect})"]
           end
+
+          return true
         else
           super(value)
         end
@@ -195,11 +195,11 @@ module Masscan
 
           return true
         when String
-          if value =~ REGEXP
-            return true
-          else
+          unless value =~ REGEXP
             return [false, "must be a valid port range or port number (#{value.inspect})"]
           end
+
+          return true
         else
           super(value)
         end
@@ -260,11 +260,11 @@ module Masscan
         when Range
           @type.validate(value)
         when String
-          if value =~ REGEXP
-            return true
-          else
+          unless value =~ REGEXP
             return [false, "not a valid port list (#{value.inspect})"]
           end
+
+          return true
         else
           super(value)
         end
@@ -379,11 +379,11 @@ module Masscan
 
           string = value.to_s
 
-          if string =~ REGEXP
-            return true
-          else
+          unless string =~ REGEXP
             return [false, "invalid rotation time (#{value.inspect})"]
           end
+
+          return true
         end
       end
 
@@ -420,11 +420,11 @@ module Masscan
 
         string = value.to_s
 
-        if string =~ REGEXP
-          return true
-        else
+        unless string =~ REGEXP
           return [false, "invalid MAC address (#{value.inspect})"]
         end
+
+        return true
       end
 
     end
