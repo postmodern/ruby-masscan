@@ -180,7 +180,7 @@ module Masscan
       option '--iflist', name: :list_interfaces
       option '--retries', name: :retries
       option '--nmap', name: :nmap_help
-      option '--pcap-payloads', name: :pcap_payloads
+      option '--pcap-payloads', name: :pcap_payloads, value: {type: InputFile.new}
       option '--nmap-payloads', name: :nmap_payloads, value: {type: InputFile.new}
 
       option '--http-method',     name: :http_method, value: true
