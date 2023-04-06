@@ -519,7 +519,7 @@ module Masscan
       option '--adapter-vlan', name: :adapter_vlan, value: true
       option '--router-mac', name: :router_mac, value: {type: MACAddress.new}
       option '--ping', name: :ping
-      option '--exclude', name: :exclude, value: true, repeats: true
+      option '--exclude', name: :exclude, value: {type: Target.new}, repeats: true
       option '--excludefile', name: :exclude_file, value: {type: InputFile.new}, repeats: true
       option '--includefile', name: :include_file, value: {type: InputFile.new}, repeats: true
       option '--append-output', name: :append_output
