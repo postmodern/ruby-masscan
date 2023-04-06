@@ -7,11 +7,11 @@ module Masscan
   # ## Example
   #
   #     require 'masscan/command'
-  #     
+  #
   #     Masscan::Command.sudo do |masscan|
   #       masscan.output_format = :list
   #       masscan.output_file   = 'masscan.txt'
-  #     
+  #
   #       masscan.ips   = '192.168.1.1/24'
   #       masscan.ports = [20,21,22,23,25,80,110,443,512,522,8080,1080]
   #     end
@@ -159,7 +159,7 @@ module Masscan
     end
 
     command "masscan" do
-      option '--range', name: :range, value: {type: List.new}
+      option '--range', name: :range, value: true
       option '-p', name: :ports, value: {type: PortList.new}
       option '--banners', name: :banners
       option '--rate',    name: :rate, value: {type: Num.new}
