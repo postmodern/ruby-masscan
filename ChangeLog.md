@@ -1,3 +1,13 @@
+### 0.2.2 / 2023-04-20
+
+* Corrected option definitions:
+  * The `--range` option expects a IP or CIDR range value.
+  * The `--exclude` option requires a value.
+  * `--range`, `--exclude`, `--excludefile`, `--includefile` options may be
+    repeated.
+  * The --pcap-payloads` option expects a file.
+  * The `--retries` option requires an argument.
+
 ### 0.2.1 / 2023-03-15
 
 * Unescape `\\xXX` hex escaped characters in payload strings parsed from `.list`
