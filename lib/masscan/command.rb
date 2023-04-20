@@ -178,7 +178,7 @@ module Masscan
       option '--includefile', name: :include_file, value: {type: InputFile.new}, repeats: true
       option '--append-output', name: :append_output
       option '--iflist', name: :list_interfaces
-      option '--retries', name: :retries
+      option '--retries', name: :retries, value: {type: Num.new}
       option '--nmap', name: :nmap_help
       option '--pcap-payloads', name: :pcap_payloads, value: {type: InputFile.new}
       option '--nmap-payloads', name: :nmap_payloads, value: {type: InputFile.new}
