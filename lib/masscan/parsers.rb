@@ -1,3 +1,3 @@
-require 'masscan/parsers/binary'
-require 'masscan/parsers/list'
-require 'masscan/parsers/json'
+require_relative 'parsers/binary'
+require_relative 'parsers/list'
+require_relative 'parsers/json'

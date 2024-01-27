@@ -1,3 +1,3 @@
-require 'masscan/command'
-require 'masscan/program'
-require 'masscan/output_file'
+require_relative 'masscan/command'
+require_relative 'masscan/program'
+require_relative 'masscan/output_file'

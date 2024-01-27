@@ -1,6 +1,6 @@
-require 'masscan/parsers/plain_text'
-require 'masscan/status'
-require 'masscan/banner'
+require_relative 'plain_text'
+require_relative '../status'
+require_relative '../banner'
 
 require 'json'
 

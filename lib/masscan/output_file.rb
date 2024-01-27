@@ -1,6 +1,6 @@
-require 'masscan/parsers/list'
-require 'masscan/parsers/json'
-require 'masscan/parsers/binary'
+require_relative 'parsers/list'
+require_relative 'parsers/json'
+require_relative 'parsers/binary'
 
 module Masscan
   #

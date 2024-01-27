@@ -1,4 +1,4 @@
-require 'masscan/command'
+require_relative 'command'
 
 module Masscan
   #

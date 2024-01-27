@@ -1,5 +1,5 @@
-require 'masscan/status'
-require 'masscan/banner'
+require_relative '../status'
+require_relative '../banner'
 
 require 'socket'
 
