@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'plain_text'
 require_relative '../status'
 require_relative '../banner'
