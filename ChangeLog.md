@@ -1,3 +1,8 @@
+### 0.2.3 / 2024-01-27
+
+* Switched to using `require_relative` to improve load-times.
+* Added `# frozen_string_literal: true` to all files.
+
 ### 0.2.2 / 2023-04-20
 
 * Corrected option definitions:
