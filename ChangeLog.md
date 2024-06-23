@@ -1,3 +1,13 @@
+### 0.3.0 / 2024-06-23
+
+* Include `Enumerable` into {Masscan::OutputFile}.
+* Improvements to {Masscan::Command}:
+  * Added the `rotate` attribute for the `--rotate` option.
+  * Allow the `ports` attribute to accept a raw String value.
+  * Improve validation of String values passed to `ports`, `adapter_port`,
+    `range`, `shards`, and `ips` attributes.
+  * Correct the type used for the `exclude` attribute.
+
 ### 0.2.3 / 2024-01-27
 
 * Switched to using `require_relative` to improve load-times.
